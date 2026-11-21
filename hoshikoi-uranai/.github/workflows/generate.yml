@@ -1,0 +1,40 @@
+name: 毎日占い生成 & デプロイ
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 毎日 UTC 0:00 = JST 9:00
+  workflow_dispatch:        # 手動実行も可能
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # アーカイブ一覧のため全履歴取得
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存ライブラリをインストール
+        run: pip install -r requirements.txt
+
+      - name: 占いHTMLを生成
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python generator/generate.py
+
+      - name: 変更をコミット & プッシュ
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "✨ $(date +'%Y-%m-%d') の占いを更新"
+          git push

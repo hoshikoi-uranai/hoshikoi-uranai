@@ -1,0 +1,361 @@
+/* =============================
+   星恋占い - メインスタイル
+   ============================= */
+
+:root {
+  --bg:        #0a0a1a;
+  --bg2:       #0f0f2a;
+  --card-bg:   rgba(255,255,255,0.04);
+  --card-border: rgba(180,140,255,0.2);
+  --accent:    #c89fff;
+  --accent2:   #ff9fcc;
+  --gold:      #f0d080;
+  --text:      #e8e0f8;
+  --text-muted:#a090c0;
+  --love:      rgba(255,100,160,0.08);
+  --general:   rgba(140,100,255,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Serif JP', serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ---- 星空背景 ---- */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(100,60,180,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(180,60,120,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(60,40,120,0.2)  0%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+.stars-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10%  15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25%  40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40%  10%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55%  65%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70%  25%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85%  50%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15%  75%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60%  85%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 10%, rgba(200,170,255,0.9) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 90%, rgba(255,180,220,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75%  70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 48%  48%, rgba(255,255,255,0.6) 0%, transparent 100%);
+}
+
+/* ---- ヘッダー ---- */
+header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(to bottom, rgba(80,40,160,0.3), transparent);
+  border-bottom: 1px solid rgba(180,140,255,0.15);
+}
+.site-subtitle {
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.site-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--accent) 50%, var(--accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  text-shadow: none;
+}
+.today-date {
+  font-size: 1rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+}
+
+/* ---- 星座ナビ ---- */
+.sign-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: rgba(10,10,30,0.6);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(180,140,255,0.1);
+  position: sticky;
+  top: 0;
+}
+.sign-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border: 1px solid rgba(180,140,255,0.2);
+  border-radius: 20px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.sign-nav a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(180,140,255,0.08);
+}
+
+/* ---- メイン ---- */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 16px 80px;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 48px;
+  color: var(--text-muted);
+  line-height: 2;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+}
+
+/* ---- カードグリッド ---- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+/* ---- カード ---- */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(180,140,255,0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 20px 16px;
+  background: linear-gradient(135deg, rgba(100,60,180,0.2), rgba(180,60,120,0.1));
+  border-bottom: 1px solid rgba(180,140,255,0.1);
+}
+.emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+.sign-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.period {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.stars {
+  margin-left: auto;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.love-section {
+  background: var(--love);
+  border-radius: 10px;
+  padding: 14px;
+}
+.general-section {
+  background: var(--general);
+  border-radius: 10px;
+  padding: 14px;
+}
+.section p {
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.lucky-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.lucky-badge {
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(240,208,128,0.1);
+  border: 1px solid rgba(240,208,128,0.25);
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+/* ---- noteリンク ---- */
+.note-link {
+  text-align: center;
+  padding: 48px 24px;
+  margin: 20px 0;
+  background: linear-gradient(135deg, rgba(100,60,180,0.15), rgba(180,60,120,0.1));
+  border: 1px solid rgba(180,140,255,0.2);
+  border-radius: 20px;
+}
+.note-link p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+}
+.note-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+}
+.note-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ---- アーカイブリンク ---- */
+.archive-link {
+  text-align: center;
+  margin-top: 20px;
+}
+.archive-link a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(160,144,192,0.3);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.archive-link a:hover { color: var(--accent); }
+
+/* ---- アーカイブページ ---- */
+.archive-title {
+  font-size: 1.5rem;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 32px;
+  letter-spacing: 0.1em;
+}
+.archive-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto 40px;
+}
+.archive-list a {
+  display: block;
+  padding: 12px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.archive-list a:hover {
+  background: rgba(180,140,255,0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.back-link {
+  display: block;
+  text-align: center;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  letter-spacing: 0.1em;
+}
+.back-link:hover { color: var(--accent); }
+
+/* ---- フッター ---- */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 32px 20px;
+  border-top: 1px solid rgba(180,140,255,0.1);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  line-height: 2;
+}
+.footer-note {
+  font-size: 0.72rem;
+  opacity: 0.6;
+}
+
+/* ---- レスポンシブ ---- */
+@media (max-width: 600px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .sign-nav a {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  .site-title {
+    font-size: 2rem;
+  }
+}
