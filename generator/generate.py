@@ -55,7 +55,7 @@ def generate_horoscope(date_str):
 - 神秘的で前向きなトーンにする
 """
     response = client.models.generate_content(
-        model="gemini-2.0-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=prompt
     )
     text = response.text.strip()
