@@ -25,10 +25,17 @@ SIGNS = [
     {"name": "魚座",   "en": "pisces",    "period": "2/19〜3/20", "emoji": "♓"},
 ]
 
+# 日本時間（JST = UTC+9）を明示的に設定
 JST = datetime.timezone(datetime.timedelta(hours=9))
 
 def get_today():
-    return datetime.datetime.now(JST)
+    """
+    GitHub ActionsはUTC動作。
+    cron '0 18 * * *' = UTC 18:00 = JST 翌3:00 のため、
+    UTCの日付ではなくJSTの日付を明示的に取得する。
+    例: UTC 2026-11-21 18:00 → JST 2026-11-22 03:00 → 11月22日として生成
+    """
+    return datetime.datetime.now(datetime.timezone.utc).astimezone(JST)
 
 def generate_horoscope(date_str):
     """Gemini APIで12星座分の占いをまとめて生成"""
