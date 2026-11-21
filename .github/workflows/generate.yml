@@ -2,7 +2,7 @@ name: 毎日占い生成 & デプロイ
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # 毎日 UTC 0:00 = JST 9:00
+    - cron: '0 18 * * *'   # 毎日 UTC 0:00 = JST 9:00
   workflow_dispatch:        # 手動実行も可能
 
 permissions:
