@@ -220,10 +220,20 @@ def render_daily_page(today, horoscope_data):
     date_str = today.strftime("%Y年%m月%d日")
     # index.htmlとほぼ同じ内容でアーカイブ保存
     html = render_index(today, horoscope_data)
-    # タイトルだけアーカイブ用に調整
+    # タイトルをアーカイブ用に調整
     html = html.replace(
         f"<title>{date_str}の星恋占い ✨ 12星座恋愛運</title>",
         f"<title>[アーカイブ] {date_str}の星恋占い | 星恋占い</title>"
+    )
+    # horoscope/配下に置くためCSSパスを1階層上に修正
+    html = html.replace(
+        '<link rel="stylesheet" href="style.css">',
+        '<link rel="stylesheet" href="../style.css">'
+    )
+    # archive.htmlへのリンクも修正
+    html = html.replace(
+        '<a href="archive.html">📅 過去の占いを見る</a>',
+        '<a href="../archive.html">📅 過去の占いを見る</a>'
     )
     return html
 
