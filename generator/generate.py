@@ -2,7 +2,9 @@ import os
 import json
 import datetime
 import shutil
+import time
 from google import genai
+from google.genai import errors as genai_errors
 
 # =============================
 # 設定
@@ -37,8 +39,8 @@ def get_today():
     """
     return datetime.datetime.now(datetime.timezone.utc).astimezone(JST)
 
-def generate_horoscope(date_str):
-    """Gemini APIで12星座分の占いをまとめて生成"""
+def generate_horoscope(date_str, max_retries=5, retry_wait=30):
+    """Gemini APIで12星座分の占いをまとめて生成（503エラー時はリトライ）"""
     sign_list = "、".join([s["name"] for s in SIGNS])
     prompt = f"""
 あなたはプロの占い師です。
@@ -61,17 +63,35 @@ def generate_horoscope(date_str):
 - 毎日異なる内容になるよう、今日の日付({date_str})を意識する
 - 神秘的で前向きなトーンにする
 """
-    response = client.models.generate_content(
-        model="gemini-3.5-flash-lite",
-        contents=prompt
-    )
-    text = response.text.strip()
-    # コードブロックがあれば除去
-    if text.startswith("```"):
-        text = text.split("```")[1]
-        if text.startswith("json"):
-            text = text[4:]
-    return json.loads(text.strip())
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
+            response = client.models.generate_content(
+                model="gemini-3.5-flash-lite",
+                contents=prompt
+            )
+            text = response.text.strip()
+            # コードブロックがあれば除去
+            if text.startswith("```"):
+                text = text.split("```")[1]
+                if text.startswith("json"):
+                    text = text[4:]
+            return json.loads(text.strip())
+
+        except genai_errors.ServerError as e:
+            # 503 混雑エラーの場合はリトライ
+            if attempt < max_retries:
+                print(f"[WARN] 503エラー（混雑中）: {e}")
+                print(f"[INFO] {retry_wait}秒後にリトライします...")
+                time.sleep(retry_wait)
+            else:
+                print(f"[ERROR] {max_retries}回試行しましたが失敗しました")
+                raise
+
+        except Exception as e:
+            # その他のエラーはすぐに失敗
+            print(f"[ERROR] 予期せぬエラー: {e}")
+            raise
 
 def stars(score):
     """スコアを星HTMLに変換"""
