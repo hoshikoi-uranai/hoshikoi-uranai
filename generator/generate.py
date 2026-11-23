@@ -67,7 +67,7 @@ def generate_horoscope(date_str, max_retries=5, retry_wait=30):
         try:
             print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
             response = client.models.generate_content(
-                model="gemini-3.5-flash-lite",
+                model="gemini-3.8-flash",
                 contents=prompt
             )
             text = response.text.strip()
