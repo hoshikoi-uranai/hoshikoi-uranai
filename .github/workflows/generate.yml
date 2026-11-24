@@ -2,7 +2,7 @@ name: 毎日占い生成 & デプロイ
 
 on:
   schedule:
-    - cron: '0 19 * * *'   # 毎日 UTC 0:00 = JST 9:00
+    - cron: '0 18 * * *'  # 毎日 UTC 18:00 = JST 翌3:00（早朝に生成、朝起きたら更新済み）
   workflow_dispatch:        # 手動実行も可能
 
 permissions:
@@ -11,6 +11,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # 15分でジョブ強制終了（無限待機防止）
 
     steps:
       - name: リポジトリをチェックアウト
