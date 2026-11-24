@@ -49,7 +49,14 @@ def get_today():
     """
     return datetime.datetime.now(datetime.timezone.utc).astimezone(JST)
 
-def generate_horoscope(date_str, max_retries=5, retry_wait=30):
+# 試すモデルの優先順位（上から順に試す）
+MODELS = [
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-8b",
+]
+
+def generate_horoscope(date_str, max_retries=3, retry_wait=20):
     """Gemini APIで12星座分の占いをまとめて生成（503エラー時はリトライ）"""
     sign_list = "、".join([s["name"] for s in SIGNS])
     prompt = f"""
@@ -73,53 +80,52 @@ def generate_horoscope(date_str, max_retries=5, retry_wait=30):
 - 毎日異なる内容になるよう、今日の日付({date_str})を意識する
 - 神秘的で前向きなトーンにする
 """
-    for attempt in range(1, max_retries + 1):
-        try:
-            print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
-
-            # タイムアウト設定（60秒で強制中断）
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(API_TIMEOUT)
-
+    for model in MODELS:
+        print(f"[INFO] モデル: {model} を試します")
+        for attempt in range(1, max_retries + 1):
             try:
-                response = client.models.generate_content(
-                    model="gemini-3.8-flash",
-                    contents=prompt
-                )
-            finally:
-                signal.alarm(0)  # タイムアウト解除
+                print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
 
-            text = response.text.strip()
-            # コードブロックがあれば除去
-            if text.startswith("```"):
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            return json.loads(text.strip())
+                # タイムアウト設定（60秒で強制中断）
+                signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(API_TIMEOUT)
 
-        except TimeoutError as e:
-            print(f"[WARN] タイムアウト（{API_TIMEOUT}秒超過）")
-            if attempt < max_retries:
-                print(f"[INFO] {retry_wait}秒後にリトライします...")
-                time.sleep(retry_wait)
-            else:
-                print(f"[ERROR] {max_retries}回試行しましたが失敗しました")
-                raise
+                try:
+                    response = client.models.generate_content(
+                        model=model,
+                        contents=prompt
+                    )
+                finally:
+                    signal.alarm(0)  # タイムアウト解除
 
-        except genai_errors.ServerError as e:
-            # 503 混雑エラーの場合はリトライ
-            if attempt < max_retries:
+                text = response.text.strip()
+                # コードブロックがあれば除去
+                if text.startswith("```"):
+                    text = text.split("```")[1]
+                    if text.startswith("json"):
+                        text = text[4:]
+                print(f"[INFO] モデル {model} で成功しました")
+                return json.loads(text.strip())
+
+            except TimeoutError:
+                print(f"[WARN] タイムアウト（{API_TIMEOUT}秒超過）")
+                if attempt < max_retries:
+                    print(f"[INFO] {retry_wait}秒後にリトライします...")
+                    time.sleep(retry_wait)
+
+            except genai_errors.ServerError as e:
                 print(f"[WARN] 503エラー（混雑中）: {e}")
-                print(f"[INFO] {retry_wait}秒後にリトライします...")
-                time.sleep(retry_wait)
-            else:
-                print(f"[ERROR] {max_retries}回試行しましたが失敗しました")
-                raise
+                if attempt < max_retries:
+                    print(f"[INFO] {retry_wait}秒後にリトライします...")
+                    time.sleep(retry_wait)
 
-        except Exception as e:
-            # その他のエラーはすぐに失敗
-            print(f"[ERROR] 予期せぬエラー: {e}")
-            raise
+            except Exception as e:
+                print(f"[WARN] モデル {model} でエラー: {e}")
+                break  # このモデルは諦めて次へ
+
+        print(f"[WARN] モデル {model} は失敗しました。次のモデルへ...")
+
+    raise RuntimeError("全モデルで失敗しました。時間をおいて再実行してください。")
 
 def stars(score):
     """スコアを星HTMLに変換"""
