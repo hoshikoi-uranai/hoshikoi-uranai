@@ -49,11 +49,11 @@ def get_today():
     """
     return datetime.datetime.now(datetime.timezone.utc).astimezone(JST)
 
-# 試すモデルの優先順位（上から順に試す）
+# 試すモデルの優先順位（上から順に試す、すべて無料枠対応）
 MODELS = [
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-8b",
+    "gemini-3.8-flash",       # メイン
+    "gemini-3.6-flash",       # フォールバック1
+    "gemini-3.5-flash-lite",  # フォールバック2
 ]
 
 def generate_horoscope(date_str, max_retries=3, retry_wait=20):
