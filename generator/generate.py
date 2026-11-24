@@ -3,8 +3,18 @@ import json
 import datetime
 import shutil
 import time
+import signal
 from google import genai
 from google.genai import errors as genai_errors
+
+# APIタイムアウト時間（秒）
+API_TIMEOUT = 60
+
+class TimeoutError(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutError("API呼び出しがタイムアウトしました")
 
 # =============================
 # 設定
@@ -66,10 +76,19 @@ def generate_horoscope(date_str, max_retries=5, retry_wait=30):
     for attempt in range(1, max_retries + 1):
         try:
             print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
-            response = client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt
-            )
+
+            # タイムアウト設定（60秒で強制中断）
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(API_TIMEOUT)
+
+            try:
+                response = client.models.generate_content(
+                    model="gemini-3.8-flash",
+                    contents=prompt
+                )
+            finally:
+                signal.alarm(0)  # タイムアウト解除
+
             text = response.text.strip()
             # コードブロックがあれば除去
             if text.startswith("```"):
@@ -77,6 +96,15 @@ def generate_horoscope(date_str, max_retries=5, retry_wait=30):
                 if text.startswith("json"):
                     text = text[4:]
             return json.loads(text.strip())
+
+        except TimeoutError as e:
+            print(f"[WARN] タイムアウト（{API_TIMEOUT}秒超過）")
+            if attempt < max_retries:
+                print(f"[INFO] {retry_wait}秒後にリトライします...")
+                time.sleep(retry_wait)
+            else:
+                print(f"[ERROR] {max_retries}回試行しましたが失敗しました")
+                raise
 
         except genai_errors.ServerError as e:
             # 503 混雑エラーの場合はリトライ
