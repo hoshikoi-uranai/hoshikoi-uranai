@@ -210,10 +210,17 @@ def render_index(today, horoscope_data):
 {cards}
     </div>
 
-    <section class="note-link">
+    <section class="note-link" style="margin-bottom:16px;">
       <p>✨ さらに詳しい恋愛占いはこちら ✨</p>
       <a href="https://note.com/lucky_godwit6515" target="_blank" class="note-btn">
         noteで詳細な占いを読む →
+      </a>
+    </section>
+
+    <section class="note-link">
+      <p>💫 あなたの恋愛スタイルを16タイプで解き明かす 💫</p>
+      <a href="mbti/index.html" class="note-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);">
+        MBTI恋愛診断を試す →
       </a>
     </section>
 

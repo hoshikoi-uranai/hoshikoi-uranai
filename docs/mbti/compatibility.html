@@ -3,273 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MBTIタイプ別の恋愛相性診断。16タイプ×16タイプの組み合わせで二人の相性を詳しく解説。">
+  <meta name="description" content="MBTIタイプ別の恋愛相性診断。16タイプの組み合わせで二人の相性・ラッキーアイテム・アドバイスを詳しく解説。">
   <title>MBTI恋愛相性診断 ✦ 星恋占い</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
-    .compat-hero { text-align:center; padding:48px 20px 32px; background:linear-gradient(to bottom,rgba(80,40,160,.3),transparent); border-bottom:1px solid rgba(180,140,255,.15); }
-    .compat-hero .breadcrumb { font-size:.75rem; letter-spacing:.2em; color:var(--text-muted); margin-bottom:8px; }
-    .compat-hero h1 { font-family:'Cinzel',serif; font-size:clamp(1.5rem,5vw,2.5rem); background:linear-gradient(135deg,var(--gold),var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:.12em; margin-bottom:10px; }
-    .compat-hero p { color:var(--text-muted); font-size:.88rem; line-height:1.9; }
-
-    .wrap { max-width:760px; margin:0 auto; padding:32px 16px 60px; position:relative; z-index:1; }
+    .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(to bottom,rgba(80,40,160,.3),transparent);border-bottom:1px solid rgba(180,140,255,.15);}
+    .hero .bc{font-size:.75rem;letter-spacing:.2em;color:var(--text-muted);margin-bottom:8px;}
+    .hero h1{font-family:'Cinzel',serif;font-size:clamp(1.5rem,5vw,2.5rem);background:linear-gradient(135deg,var(--gold),var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.12em;margin-bottom:10px;}
+    .hero p{color:var(--text-muted);font-size:.88rem;line-height:1.9;}
+    .wrap{max-width:760px;margin:0 auto;padding:32px 16px 60px;position:relative;z-index:1;}
 
     /* セレクタ */
-    .selector-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:24px; margin-bottom:24px; }
-    .selector-row { display:flex; gap:16px; align-items:center; justify-content:center; flex-wrap:wrap; }
-    .selector-label { font-size:.82rem; color:var(--text-muted); letter-spacing:.1em; text-align:center; }
-    .type-select {
-      appearance:none;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(180,140,255,.3);
-      border-radius:10px;
-      color:var(--text);
-      font-family:'Noto Serif JP',serif;
-      font-size:1rem;
-      padding:10px 36px 10px 14px;
-      cursor:pointer;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23a090c0'/%3E%3C/svg%3E");
-      background-repeat:no-repeat;
-      background-position:right 12px center;
-    }
-    .type-select:focus { outline:none; border-color:var(--accent); }
-    .vs-badge { font-family:'Cinzel',serif; font-size:1.2rem; color:var(--gold); padding:0 8px; }
-    .check-btn { padding:12px 32px; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:white; border:none; border-radius:50px; font-family:'Noto Serif JP',serif; font-size:.95rem; cursor:pointer; letter-spacing:.08em; box-shadow:0 4px 20px rgba(139,92,246,.3); transition:all .2s; }
-    .check-btn:hover { opacity:.9; transform:translateY(-2px); }
+    .sel-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:28px 20px;margin-bottom:28px;}
+    .sel-row{display:flex;gap:16px;align-items:flex-end;justify-content:center;flex-wrap:wrap;}
+    .sel-group{text-align:center;}
+    .sel-label{font-size:.78rem;color:var(--text-muted);letter-spacing:.1em;margin-bottom:8px;}
+    .tsel{appearance:none;background:rgba(255,255,255,.05);border:1px solid rgba(180,140,255,.3);border-radius:10px;color:var(--text);font-family:'Noto Serif JP',serif;font-size:1rem;padding:10px 36px 10px 14px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23a090c0'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;min-width:200px;}
+    .tsel:focus{outline:none;border-color:var(--accent);}
+    .vs{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--gold);padding:0 4px 10px;}
+    .chk-btn{padding:14px 36px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;border:none;border-radius:50px;font-family:'Noto Serif JP',serif;font-size:.95rem;cursor:pointer;letter-spacing:.08em;box-shadow:0 4px 20px rgba(139,92,246,.3);transition:all .2s;display:block;margin:20px auto 0;}
+    .chk-btn:hover{opacity:.9;transform:translateY(-2px);}
 
-    /* 結果 */
-    #compat-result { display:none; }
-    .compat-result-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:28px 24px; margin-bottom:20px; }
-    .compat-types { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
-    .compat-type-badge { font-family:'Cinzel',serif; font-size:1.6rem; background:linear-gradient(135deg,var(--gold),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .compat-heart { font-size:1.6rem; }
-    .compat-score-wrap { text-align:center; margin:16px 0; }
-    .compat-score { font-size:3rem; font-family:'Cinzel',serif; color:var(--gold); }
-    .compat-score-label { font-size:.8rem; color:var(--text-muted); letter-spacing:.15em; }
-    .heart-row { font-size:1.6rem; letter-spacing:4px; margin:8px 0; }
+    /* 結果カード */
+    #result{display:none;}
+    .rc{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px 24px;margin-bottom:20px;}
+    .rt{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+    .rb{font-family:'Cinzel',serif;font-size:1.8rem;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .rn{font-size:.8rem;color:var(--text-muted);}
+    .rscore{text-align:center;margin:16px 0 20px;}
+    .rscore .num{font-size:3rem;font-family:'Cinzel',serif;color:var(--gold);}
+    .hearts{font-size:1.5rem;letter-spacing:3px;margin:6px 0;}
+    .rlabel{font-size:.82rem;color:var(--text-muted);letter-spacing:.15em;}
 
-    .compat-sections { display:flex; flex-direction:column; gap:14px; margin-top:20px; }
-    .compat-sec { background:rgba(255,255,255,.03); border-radius:12px; padding:16px; }
-    .compat-sec h3 { font-size:.78rem; color:var(--text-muted); letter-spacing:.15em; margin-bottom:8px; }
-    .compat-sec p { font-size:.88rem; line-height:1.9; }
-    .compat-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-    .compat-tag { font-size:.72rem; padding:4px 12px; border-radius:20px; border:1px solid; }
-    .tag-good { background:rgba(100,200,120,.08); border-color:rgba(100,200,120,.3); color:#80e090; }
-    .tag-bad  { background:rgba(255,100,100,.08); border-color:rgba(255,100,100,.3); color:#ff9090; }
-    .tag-tip  { background:rgba(240,208,128,.08); border-color:rgba(240,208,128,.3); color:var(--gold); }
+    .secs{display:flex;flex-direction:column;gap:14px;margin-top:4px;}
+    .sec{background:rgba(255,255,255,.03);border-radius:12px;padding:16px 18px;}
+    .sec h3{font-size:.75rem;letter-spacing:.15em;color:var(--text-muted);margin-bottom:10px;}
+    .sec p{font-size:.88rem;line-height:1.9;color:var(--text);}
+    .lucky-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .lbadge{font-size:.78rem;padding:5px 14px;border-radius:20px;background:rgba(240,208,128,.1);border:1px solid rgba(240,208,128,.25);color:var(--gold);}
+    .advice-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+    .advice-list li{font-size:.86rem;line-height:1.8;padding-left:1.2em;position:relative;color:var(--text);}
+    .advice-list li::before{content:"✦";position:absolute;left:0;color:var(--accent);font-size:.7rem;top:.15em;}
 
-    /* 全相性表 */
-    .matrix-wrap { overflow-x:auto; margin-top:32px; }
-    .matrix-title { font-size:1rem; color:var(--accent); text-align:center; margin-bottom:16px; letter-spacing:.1em; }
-    table.matrix { border-collapse:collapse; min-width:600px; width:100%; font-size:.62rem; }
-    table.matrix th { background:rgba(180,140,255,.1); color:var(--text-muted); padding:5px 4px; text-align:center; border:1px solid rgba(180,140,255,.1); letter-spacing:.05em; }
-    table.matrix td { padding:4px 2px; text-align:center; border:1px solid rgba(180,140,255,.08); cursor:pointer; transition:background .15s; font-size:.7rem; font-weight:600; }
-    table.matrix td:hover { background:rgba(180,140,255,.2) !important; }
-    .s5 { background:rgba(255,100,160,.25); color:#ff9fcc; }
-    .s4 { background:rgba(200,150,255,.18); color:#c89fff; }
-    .s3 { background:rgba(100,120,200,.12); color:#a0b0e8; }
-    .s2 { background:rgba(100,100,120,.1);  color:#8080a0; }
-    .s1 { background:rgba(60,60,80,.08);    color:#606080; }
-    .legend { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:12px; font-size:.72rem; }
-    .legend span { display:flex; align-items:center; gap:4px; }
-    .legend-dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+    /* マトリクス */
+    .mx-wrap{overflow-x:auto;margin-top:36px;}
+    .mx-title{font-size:1rem;color:var(--accent);text-align:center;margin-bottom:14px;letter-spacing:.1em;}
+    table.mx{border-collapse:collapse;min-width:580px;width:100%;font-size:.6rem;}
+    table.mx th{background:rgba(180,140,255,.1);color:var(--text-muted);padding:5px 3px;text-align:center;border:1px solid rgba(180,140,255,.1);letter-spacing:.03em;}
+    table.mx td{padding:4px 2px;text-align:center;border:1px solid rgba(180,140,255,.08);cursor:pointer;transition:background .15s;font-size:.68rem;font-weight:600;}
+    table.mx td:hover{background:rgba(180,140,255,.25)!important;}
+    .s5{background:rgba(255,100,160,.28);color:#ff9fcc;}
+    .s4{background:rgba(200,150,255,.2);color:#c89fff;}
+    .s3{background:rgba(100,120,200,.14);color:#a0b0e8;}
+    .s2{background:rgba(100,100,120,.1);color:#8080a0;}
+    .s1{background:rgba(60,60,80,.08);color:#606080;}
+    .legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:.7rem;}
+    .legend span{display:flex;align-items:center;gap:4px;}
+    .ld{width:10px;height:10px;border-radius:50%;display:inline-block;}
+    .hidden{display:none!important;}
   </style>
 </head>
 <body>
-  <div class="stars-bg"></div>
+<div class="stars-bg"></div>
+<div class="hero">
+  <p class="bc"><a href="../index.html" style="color:inherit;text-decoration:none;">✦ 星恋占い</a> / <a href="index.html" style="color:inherit;text-decoration:none;">MBTI恋愛診断</a> / 相性診断</p>
+  <h1>💕 MBTI 恋愛相性診断</h1>
+  <p>二人のタイプを選んで<br>恋愛相性・ラッキーアイテム・アドバイスを確認</p>
+</div>
 
-  <div class="compat-hero">
-    <p class="breadcrumb"><a href="../index.html" style="color:inherit;text-decoration:none;">✦ 星恋占い</a> / <a href="index.html" style="color:inherit;text-decoration:none;">MBTI恋愛診断</a> / 相性診断</p>
-    <h1>💕 MBTI 恋愛相性診断</h1>
-    <p>二人のタイプを選んで<br>恋愛相性を詳しくチェック</p>
+<div class="wrap">
+  <div class="sel-card">
+    <div style="text-align:center;margin-bottom:18px;font-size:.85rem;color:var(--text-muted);letter-spacing:.1em;">タイプを選んで相性チェック</div>
+    <div class="sel-row">
+      <div class="sel-group"><div class="sel-label">あなた</div><select class="tsel" id="ta"></select></div>
+      <div class="vs">💕</div>
+      <div class="sel-group"><div class="sel-label">相手</div><select class="tsel" id="tb"></select></div>
+    </div>
+    <button class="chk-btn" onclick="check()">相性を診断する ✨</button>
   </div>
 
-  <div class="wrap">
-
-    <!-- セレクタ -->
-    <div class="selector-card">
-      <div style="text-align:center;margin-bottom:16px;font-size:.85rem;color:var(--text-muted);letter-spacing:.1em;">タイプを選んで相性チェック</div>
-      <div class="selector-row">
-        <div>
-          <div class="selector-label" style="margin-bottom:6px;">あなた</div>
-          <select class="type-select" id="type-a">
-            <option value="">選択してください</option>
-          </select>
-        </div>
-        <div class="vs-badge">💕</div>
-        <div>
-          <div class="selector-label" style="margin-bottom:6px;">相手</div>
-          <select class="type-select" id="type-b">
-            <option value="">選択してください</option>
-          </select>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:20px;">
-        <button class="check-btn" onclick="checkCompat()">相性を診断する ✨</button>
-      </div>
-    </div>
-
-    <!-- 結果 -->
-    <div id="compat-result">
-      <div class="compat-result-card" id="compat-result-card"></div>
-    </div>
-
-    <!-- 全相性マトリクス -->
-    <div class="matrix-wrap">
-      <div class="matrix-title">📊 全タイプ相性マトリクス</div>
-      <table class="matrix" id="matrix-table"></table>
-      <div class="legend">
-        <span><span class="legend-dot" style="background:#ff9fcc"></span>運命的（★5）</span>
-        <span><span class="legend-dot" style="background:#c89fff"></span>相性良好（★4）</span>
-        <span><span class="legend-dot" style="background:#a0b0e8"></span>普通（★3）</span>
-        <span><span class="legend-dot" style="background:#8080a0"></span>要努力（★2）</span>
-        <span><span class="legend-dot" style="background:#606080"></span>難関（★1）</span>
-      </div>
-    </div>
-
+  <div id="result">
+    <div class="rc" id="rc"></div>
   </div>
 
-  <footer style="position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(180,140,255,.1);color:var(--text-muted);font-size:.8rem;line-height:2;">
-    <p><a href="index.html" style="color:var(--text-muted);text-decoration:none;">← MBTI診断に戻る</a>　|　<a href="../index.html" style="color:var(--text-muted);text-decoration:none;">星恋占いトップへ</a></p>
-    <p style="margin-top:8px;">© 星恋占い — MBTI恋愛相性診断</p>
-    <p style="font-size:.7rem;opacity:.6;">本診断はエンタメ目的のオリジナルコンテンツです</p>
-  </footer>
+  <div class="mx-wrap">
+    <div class="mx-title">📊 全タイプ相性マトリクス</div>
+    <table class="mx" id="mx"></table>
+    <div class="legend">
+      <span><span class="ld" style="background:#ff9fcc"></span>運命的（★5）</span>
+      <span><span class="ld" style="background:#c89fff"></span>相性良好（★4）</span>
+      <span><span class="ld" style="background:#a0b0e8"></span>普通（★3）</span>
+      <span><span class="ld" style="background:#8080a0"></span>要努力（★2）</span>
+      <span><span class="ld" style="background:#606080"></span>難関（★1）</span>
+    </div>
+  </div>
+</div>
 
-  <script>
-  const ALL_TYPES = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+<footer style="position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(180,140,255,.1);color:var(--text-muted);font-size:.8rem;line-height:2;">
+  <p><a href="index.html" style="color:var(--text-muted);text-decoration:none;">← MBTI診断に戻る</a>　|　<a href="../index.html" style="color:var(--text-muted);text-decoration:none;">星恋占いトップへ</a></p>
+  <p style="margin-top:8px;">© 星恋占い — MBTI恋愛相性診断</p>
+  <p style="font-size:.7rem;opacity:.6;">本診断はエンタメ目的のオリジナルコンテンツです</p>
+</footer>
 
-  // 相性データ（スコア1〜5）
-  // 心理機能の補完性・類似性・文献的相性をベースに設定
-  const COMPAT_DATA = {
-    INTJ:{ INTJ:3,INTP:4,ENTJ:4,ENTP:5,INFJ:4,INFP:3,ENFJ:3,ENFP:5,ISTJ:3,ISFJ:2,ESTJ:2,ESFJ:1,ISTP:3,ISFP:2,ESTP:2,ESFP:1 },
-    INTP:{ INTJ:4,INTP:3,ENTJ:3,ENTP:4,INFJ:3,INFP:3,ENFJ:5,ENFP:4,ISTJ:3,ISFJ:2,ESTJ:3,ESFJ:2,ISTP:4,ISFP:2,ESTP:3,ESFP:2 },
-    ENTJ:{ INTJ:4,INTP:3,ENTJ:3,ENTP:4,INFJ:3,INFP:5,ENFJ:3,ENFP:3,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:2,ISTP:3,ISFP:4,ESTP:3,ESFP:2 },
-    ENTP:{ INTJ:5,INTP:4,ENTJ:4,ENTP:3,INFJ:5,INFP:3,ENFJ:3,ENFP:3,ISTJ:2,ISFJ:2,ESTJ:2,ESFJ:2,ISTP:3,ISFP:2,ESTP:3,ESFP:2 },
-    INFJ:{ INTJ:4,INTP:3,ENTJ:3,ENTP:5,INFJ:3,INFP:4,ENFJ:4,ENFP:5,ISTJ:2,ISFJ:3,ESTJ:2,ESFJ:2,ISTP:2,ISFP:3,ESTP:1,ESFP:2 },
-    INFP:{ INTJ:3,INTP:3,ENTJ:5,ENTP:3,INFJ:4,INFP:3,ENFJ:5,ENFP:4,ISTJ:2,ISFJ:2,ESTJ:2,ESFJ:3,ISTP:2,ISFP:3,ESTP:2,ESFP:3 },
-    ENFJ:{ INTJ:3,INTP:5,ENTJ:3,ENTP:3,INFJ:4,INFP:5,ENFJ:3,ENFP:4,ISTJ:3,ISFJ:3,ESTJ:3,ESFJ:3,ISTP:2,ISFP:5,ESTP:2,ESFP:3 },
-    ENFP:{ INTJ:5,INTP:4,ENTJ:3,ENTP:3,INFJ:5,INFP:4,ENFJ:4,ENFP:3,ISTJ:2,ISFJ:3,ESTJ:2,ESFJ:3,ISTP:2,ISFP:3,ESTP:2,ESFP:3 },
-    ISTJ:{ INTJ:3,INTP:3,ENTJ:4,ENTP:2,INFJ:2,INFP:2,ENFJ:3,ENFP:2,ISTJ:3,ISFJ:4,ESTJ:4,ESFJ:3,ISTP:3,ISFP:3,ESTP:5,ESFP:5 },
-    ISFJ:{ INTJ:2,INTP:2,ENTJ:3,ENTP:2,INFJ:3,INFP:2,ENFJ:3,ENFP:3,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:4,ISTP:3,ISFP:4,ESTP:5,ESFP:5 },
-    ESTJ:{ INTJ:2,INTP:3,ENTJ:3,ENTP:2,INFJ:2,INFP:2,ENFJ:3,ENFP:2,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:4,ISTP:5,ISFP:5,ESTP:4,ESFP:3 },
-    ESFJ:{ INTJ:1,INTP:2,ENTJ:2,ENTP:2,INFJ:2,INFP:3,ENFJ:3,ENFP:3,ISTJ:3,ISFJ:4,ESTJ:4,ESFJ:3,ISTP:5,ISFP:5,ESTP:3,ESFP:4 },
-    ISTP:{ INTJ:3,INTP:4,ENTJ:3,ENTP:3,INFJ:2,INFP:2,ENFJ:2,ENFP:2,ISTJ:3,ISFJ:3,ESTJ:5,ESFJ:5,ISTP:3,ISFP:4,ESTP:4,ESFP:3 },
-    ISFP:{ INTJ:2,INTP:2,ENTJ:4,ENTP:2,INFJ:3,INFP:3,ENFJ:5,ENFP:3,ISTJ:3,ISFJ:4,ESTJ:5,ESFJ:5,ISTP:4,ISFP:3,ESTP:3,ESFP:4 },
-    ESTP:{ INTJ:2,INTP:3,ENTJ:3,ENTP:3,INFJ:1,INFP:2,ENFJ:2,ENFP:2,ISTJ:5,ISFJ:5,ESTJ:4,ESFJ:3,ISTP:4,ISFP:3,ESTP:3,ESFP:4 },
-    ESFP:{ INTJ:1,INTP:2,ENTJ:2,ENTP:2,INFJ:2,INFP:3,ENFJ:3,ENFP:3,ISTJ:5,ISFJ:5,ESTJ:3,ESFJ:4,ISTP:3,ISFP:4,ESTP:4,ESFP:3 },
-  };
+<script>
+const ALL=['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+const NICKS={INTJ:"建築家",INTP:"論理学者",ENTJ:"指揮官",ENTP:"討論者",INFJ:"提唱者",INFP:"仲介者",ENFJ:"主人公",ENFP:"広報運動家",ISTJ:"管理者",ISFJ:"擁護者",ESTJ:"幹部",ESFJ:"領事",ISTP:"巨匠",ISFP:"冒険家",ESTP:"起業家",ESFP:"エンターテイナー"};
 
-  // 相性コメントデータ
-  const COMPAT_COMMENTS = {
-    5: { label:"運命的な相性 💫", hearts:"♥♥♥♥♥", good:"心理機能が自然に補い合い、お互いの弱点を強みでカバーできる理想的な組み合わせ。最初から会話が弾み、価値観の共鳴を感じやすいでしょう。", bad:"相性が良すぎるため、お互いに依存しすぎる危険も。適度な距離感を保つことが長続きの秘訣です。", tip:"この相性を活かすには、素直な気持ちを早めに伝えることが大切。相手もあなたへの関心が高い可能性大！" },
-    4: { label:"相性良好 ✨",    hearts:"♥♥♥♥☆", good:"多くの価値観が一致し、一緒にいて心地よい安心感がある組み合わせ。理解し合えるポイントが多く、自然に関係が深まります。", bad:"似ている部分が多い反面、同じ弱点も持ちやすい。意識的に異なる視点を取り入れると成長できます。", tip:"一緒にいる時間を大切に。共通の趣味を見つけると距離がさらに縮まります。" },
-    3: { label:"標準的な相性 🌙",  hearts:"♥♥♥☆☆", good:"お互いに学び合える部分がある組み合わせ。最初は違和感を感じることもありますが、理解が深まると安定した関係になれます。", bad:"コミュニケーションスタイルの違いが誤解を生むことも。意図を丁寧に伝え合う習慣をつけましょう。", tip:"焦らず時間をかけて相手を知ることが大切。違いを楽しむ余裕が関係を豊かにします。" },
-    2: { label:"努力が必要 🌧️",   hearts:"♥♥☆☆☆", good:"表面的には違いが多く見えますが、お互いに惹かれる「異質さ」がある組み合わせ。努力次第でユニークな関係を築けます。", bad:"価値観や行動スタイルの違いから衝突しやすい。思い込みで判断せず、相手の視点を尊重する姿勢が必要です。", tip:"まず「違って当然」と受け入れることからスタート。小さな歩み寄りを積み重ねましょう。" },
-    1: { label:"難関の相性 ⚡",   hearts:"♥☆☆☆☆", good:"非常に異なるタイプですが、だからこそお互いが持っていないものを持ち寄れます。乗り越えれば最強のパートナーになれる可能性も。", bad:"根本的な価値観・行動スタイルの違いが大きく、無意識のすれ違いが多くなりがちです。", tip:"相手を変えようとせず、違いを認め合うことが第一歩。共通のゴールを設定すると協力しやすくなります。" },
-  };
+const CD={
+  INTJ:{INTJ:3,INTP:4,ENTJ:4,ENTP:5,INFJ:4,INFP:3,ENFJ:3,ENFP:5,ISTJ:3,ISFJ:2,ESTJ:2,ESFJ:1,ISTP:3,ISFP:2,ESTP:2,ESFP:1},
+  INTP:{INTJ:4,INTP:3,ENTJ:3,ENTP:4,INFJ:3,INFP:3,ENFJ:5,ENFP:4,ISTJ:3,ISFJ:2,ESTJ:3,ESFJ:2,ISTP:4,ISFP:2,ESTP:3,ESFP:2},
+  ENTJ:{INTJ:4,INTP:3,ENTJ:3,ENTP:4,INFJ:3,INFP:5,ENFJ:3,ENFP:3,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:2,ISTP:3,ISFP:4,ESTP:3,ESFP:2},
+  ENTP:{INTJ:5,INTP:4,ENTJ:4,ENTP:3,INFJ:5,INFP:3,ENFJ:3,ENFP:3,ISTJ:2,ISFJ:2,ESTJ:2,ESFJ:2,ISTP:3,ISFP:2,ESTP:3,ESFP:2},
+  INFJ:{INTJ:4,INTP:3,ENTJ:3,ENTP:5,INFJ:3,INFP:4,ENFJ:4,ENFP:5,ISTJ:2,ISFJ:3,ESTJ:2,ESFJ:2,ISTP:2,ISFP:3,ESTP:1,ESFP:2},
+  INFP:{INTJ:3,INTP:3,ENTJ:5,ENTP:3,INFJ:4,INFP:3,ENFJ:5,ENFP:4,ISTJ:2,ISFJ:2,ESTJ:2,ESFJ:3,ISTP:2,ISFP:3,ESTP:2,ESFP:3},
+  ENFJ:{INTJ:3,INTP:5,ENTJ:3,ENTP:3,INFJ:4,INFP:5,ENFJ:3,ENFP:4,ISTJ:3,ISFJ:3,ESTJ:3,ESFJ:3,ISTP:2,ISFP:5,ESTP:2,ESFP:3},
+  ENFP:{INTJ:5,INTP:4,ENTJ:3,ENTP:3,INFJ:5,INFP:4,ENFJ:4,ENFP:3,ISTJ:2,ISFJ:3,ESTJ:2,ESFJ:3,ISTP:2,ISFP:3,ESTP:2,ESFP:3},
+  ISTJ:{INTJ:3,INTP:3,ENTJ:4,ENTP:2,INFJ:2,INFP:2,ENFJ:3,ENFP:2,ISTJ:3,ISFJ:4,ESTJ:4,ESFJ:3,ISTP:3,ISFP:3,ESTP:5,ESFP:5},
+  ISFJ:{INTJ:2,INTP:2,ENTJ:3,ENTP:2,INFJ:3,INFP:2,ENFJ:3,ENFP:3,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:4,ISTP:3,ISFP:4,ESTP:5,ESFP:5},
+  ESTJ:{INTJ:2,INTP:3,ENTJ:3,ENTP:2,INFJ:2,INFP:2,ENFJ:3,ENFP:2,ISTJ:4,ISFJ:3,ESTJ:3,ESFJ:4,ISTP:5,ISFP:5,ESTP:4,ESFP:3},
+  ESFJ:{INTJ:1,INTP:2,ENTJ:2,ENTP:2,INFJ:2,INFP:3,ENFJ:3,ENFP:3,ISTJ:3,ISFJ:4,ESTJ:4,ESFJ:3,ISTP:5,ISFP:5,ESTP:3,ESFP:4},
+  ISTP:{INTJ:3,INTP:4,ENTJ:3,ENTP:3,INFJ:2,INFP:2,ENFJ:2,ENFP:2,ISTJ:3,ISFJ:3,ESTJ:5,ESFJ:5,ISTP:3,ISFP:4,ESTP:4,ESFP:3},
+  ISFP:{INTJ:2,INTP:2,ENTJ:4,ENTP:2,INFJ:3,INFP:3,ENFJ:5,ENFP:3,ISTJ:3,ISFJ:4,ESTJ:5,ESFJ:5,ISTP:4,ISFP:3,ESTP:3,ESFP:4},
+  ESTP:{INTJ:2,INTP:3,ENTJ:3,ENTP:3,INFJ:1,INFP:2,ENFJ:2,ENFP:2,ISTJ:5,ISFJ:5,ESTJ:4,ESFJ:3,ISTP:4,ISFP:3,ESTP:3,ESFP:4},
+  ESFP:{INTJ:1,INTP:2,ENTJ:2,ENTP:2,INFJ:2,INFP:3,ENFJ:3,ENFP:3,ISTJ:5,ISFJ:5,ESTJ:3,ESFJ:4,ISTP:3,ISFP:4,ESTP:4,ESFP:3},
+};
 
-  const TYPE_NICKS = { INTJ:"建築家",INTP:"論理学者",ENTJ:"指揮官",ENTP:"討論者",INFJ:"提唱者",INFP:"仲介者",ENFJ:"主人公",ENFP:"広報運動家",ISTJ:"管理者",ISFJ:"擁護者",ESTJ:"幹部",ESFJ:"領事",ISTP:"巨匠",ISFP:"冒険家",ESTP:"起業家",ESFP:"エンターテイナー" };
+// スコア別の基本コメント
+const BASE={
+  5:{label:"運命的な相性 💫",hearts:"♥♥♥♥♥",good:"心理機能が自然に補い合い、お互いの弱点を強みでカバーできる理想的な組み合わせ。最初から会話が弾み、価値観の共鳴を感じやすいでしょう。",bad:"相性が良すぎるため依存しすぎる危険も。適度な距離感を保つことが長続きの秘訣です。"},
+  4:{label:"相性良好 ✨",hearts:"♥♥♥♥☆",good:"多くの価値観が一致し、一緒にいて心地よい安心感がある組み合わせ。理解し合えるポイントが多く、自然に関係が深まります。",bad:"似ている部分が多い反面、同じ弱点も持ちやすい。意識的に異なる視点を取り入れると成長できます。"},
+  3:{label:"標準的な相性 🌙",hearts:"♥♥♥☆☆",good:"お互いに学び合える部分がある組み合わせ。最初は違和感を感じることもありますが、理解が深まると安定した関係になれます。",bad:"コミュニケーションスタイルの違いが誤解を生むことも。意図を丁寧に伝え合う習慣をつけましょう。"},
+  2:{label:"努力が必要 🌧️",hearts:"♥♥☆☆☆",good:"表面的には違いが多く見えますが、お互いに惹かれる「異質さ」がある組み合わせ。努力次第でユニークな関係を築けます。",bad:"価値観や行動スタイルの違いから衝突しやすい。思い込みで判断せず、相手の視点を尊重する姿勢が必要です。"},
+  1:{label:"難関の相性 ⚡",hearts:"♥☆☆☆☆",good:"非常に異なるタイプですが、だからこそお互いが持っていないものを持ち寄れます。乗り越えれば最強のパートナーになれる可能性も。",bad:"根本的な価値観・行動スタイルの違いが大きく、無意識のすれ違いが多くなりがちです。"},
+};
 
-  // セレクトボックスを初期化
-  function initSelects() {
-    const groups = [
-      { label:"分析家（NT）", types:["INTJ","INTP","ENTJ","ENTP"] },
-      { label:"外交官（NF）", types:["INFJ","INFP","ENFJ","ENFP"] },
-      { label:"番人（SJ）",   types:["ISTJ","ISFJ","ESTJ","ESFJ"] },
-      { label:"探検家（SP）", types:["ISTP","ISFP","ESTP","ESFP"] },
-    ];
-    ['type-a','type-b'].forEach(id => {
-      const sel = document.getElementById(id);
-      groups.forEach(g => {
-        const og = document.createElement('optgroup');
-        og.label = g.label;
-        g.types.forEach(t => {
-          const op = document.createElement('option');
-          op.value = t;
-          op.textContent = `${t}（${TYPE_NICKS[t]}）`;
-          og.appendChild(op);
-        });
-        sel.appendChild(og);
+// タイプ別の特性（軸ごと）
+const AXIS_TRAITS={
+  E:"社交的・エネルギッシュ・積極的",I:"内省的・深く考える・一対一を好む",
+  S:"現実的・具体的・経験を重視",N:"直感的・抽象的・可能性を重視",
+  T:"論理的・客観的・原則重視",F:"共感的・調和重視・感情を大切に",
+  J:"計画的・秩序を好む・決断が早い",P:"柔軟・自発的・選択肢を残す",
+};
+
+// タイプ組み合わせ別のラッキーアイテム・デートスポット・アドバイス
+const PAIR_DATA={
+  "5":{
+    lucky:["ムーンストーン","ラベンダーのアロマ","満月の夜のロウソク"],
+    date:"静かな星空観察スポット・アンティークカフェ・美術館の夜間開放",
+    advice:["初デートは二人だけの空間を選ぶと本来の魅力が伝わります","共通の「秘密の場所」を作ると絆が一気に深まります","相手の価値観を否定せず「そういう見方もあるね」と受け入れる姿勢が鍵"]
+  },
+  "4":{
+    lucky:["ローズクォーツ","お気に入りの本","ペアのマグカップ"],
+    date:"共通の趣味を活かしたアクティビティ・こだわりのカフェ巡り・朝市",
+    advice:["共通の趣味や興味を見つけることで関係がさらに加速します","「ありがとう」を言葉にして伝える習慣が二人の仲を育てます","忙しくても週1回は二人の時間を確保しましょう"]
+  },
+  "3":{
+    lucky:["アメジスト","共通の映画・音楽","手書きのメモ"],
+    date:"会話が弾むボードゲームカフェ・料理教室・ドライブ",
+    advice:["相手の「違い」を個性として楽しむ視点が関係を豊かにします","意見が合わないときこそ「なぜそう思う？」と興味を持って聞きましょう","定期的に二人の「いいところ」を言い合う習慣をつけると◎"]
+  },
+  "2":{
+    lucky:["タイガーアイ","共通の目標メモ","温かいお茶のギフト"],
+    date:"一緒に何かを作る体験型ワークショップ・ハイキング・料理対決",
+    advice:["最初から全てを理解し合おうとせず「少しずつ」を大切に","相手が大切にしているものを一つ覚えて話題にしてみましょう","喧嘩したら24時間置いてから話し合うと解決しやすくなります"]
+  },
+  "1":{
+    lucky:["ヘマタイト","お互いの好きな食べ物","ユーモアのある絵葉書"],
+    date:"非日常を共有できる体験（エスケープルームなど）・フードフェス・ライブ",
+    advice:["お互いの「当たり前」が違うことを最初に認め合いましょう","小さな歩み寄りを積み重ねることで信頼が生まれます","共通の「敵」（映画の悪役・難しいゲームなど）を設定すると団結力が生まれます"]
+  }
+};
+
+function initSelects(){
+  const groups=[
+    {label:"分析家（NT）",types:["INTJ","INTP","ENTJ","ENTP"]},
+    {label:"外交官（NF）",types:["INFJ","INFP","ENFJ","ENFP"]},
+    {label:"番人（SJ）",  types:["ISTJ","ISFJ","ESTJ","ESFJ"]},
+    {label:"探検家（SP）",types:["ISTP","ISFP","ESTP","ESFP"]},
+  ];
+  ['ta','tb'].forEach(id=>{
+    const sel=document.getElementById(id);
+    sel.innerHTML='<option value="">選択してください</option>';
+    groups.forEach(g=>{
+      const og=document.createElement('optgroup');
+      og.label=g.label;
+      g.types.forEach(t=>{
+        const op=document.createElement('option');
+        op.value=t;op.textContent=`${t}（${NICKS[t]}）`;
+        og.appendChild(op);
       });
+      sel.appendChild(og);
     });
-  }
-
-  function checkCompat() {
-    const a = document.getElementById('type-a').value;
-    const b = document.getElementById('type-b').value;
-    if (!a || !b) { alert('両方のタイプを選んでください！'); return; }
-    const score = COMPAT_DATA[a][b];
-    const c = COMPAT_COMMENTS[score];
-    const nickA = TYPE_NICKS[a], nickB = TYPE_NICKS[b];
-
-    document.getElementById('compat-result-card').innerHTML = `
-      <div class="compat-types">
-        <span class="compat-type-badge">${a}</span>
-        <span style="font-size:.8rem;color:var(--text-muted)">（${nickA}）</span>
-        <span class="compat-heart">💕</span>
-        <span class="compat-type-badge">${b}</span>
-        <span style="font-size:.8rem;color:var(--text-muted)">（${nickB}）</span>
-      </div>
-      <div class="compat-score-wrap">
-        <div class="compat-score">${score}<span style="font-size:1.5rem;color:var(--text-muted)">/5</span></div>
-        <div class="heart-row">${c.hearts}</div>
-        <div class="compat-score-label">${c.label}</div>
-      </div>
-      <div class="compat-sections">
-        <div class="compat-sec">
-          <h3>✅ 相性の良いポイント</h3>
-          <p>${c.good}</p>
-        </div>
-        <div class="compat-sec">
-          <h3>⚠️ 注意すべきポイント</h3>
-          <p>${c.bad}</p>
-        </div>
-        <div class="compat-sec">
-          <h3>💡 うまくいくためのヒント</h3>
-          <p>${c.tip}</p>
-        </div>
-      </div>
-    `;
-    document.getElementById('compat-result').style.display = '';
-    document.getElementById('compat-result').scrollIntoView({ behavior:'smooth', block:'start' });
-  }
-
-  // マトリクス描画
-  function renderMatrix() {
-    const tbl = document.getElementById('matrix-table');
-    let html = '<tr><th></th>';
-    ALL_TYPES.forEach(t => html += `<th>${t}</th>`);
-    html += '</tr>';
-    ALL_TYPES.forEach(a => {
-      html += `<tr><th>${a}</th>`;
-      ALL_TYPES.forEach(b => {
-        const s = COMPAT_DATA[a][b];
-        html += `<td class="s${s}" onclick="quickCheck('${a}','${b}')" title="${a}×${b}：${s}/5">${s}</td>`;
-      });
-      html += '</tr>';
-    });
-    tbl.innerHTML = html;
-  }
-
-  function quickCheck(a, b) {
-    document.getElementById('type-a').value = a;
-    document.getElementById('type-b').value = b;
-    checkCompat();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // URLパラメータからタイプを取得
-  window.addEventListener('load', () => {
-    initSelects();
-    renderMatrix();
-    const params = new URLSearchParams(location.search);
-    const type = params.get('type');
-    if (type && COMPAT_DATA[type]) {
-      document.getElementById('type-a').value = type;
-    }
   });
-  </script>
+}
+
+function check(){
+  const a=document.getElementById('ta').value;
+  const b=document.getElementById('tb').value;
+  if(!a||!b){alert('両方のタイプを選んでください！');return;}
+  const score=CD[a][b];
+  const base=BASE[score];
+  const pd=PAIR_DATA[String(score)];
+  const nA=NICKS[a],nB=NICKS[b];
+
+  // 軸の共通点・相違点を分析
+  const shared=[], diff=[];
+  for(let i=0;i<4;i++){
+    if(a[i]===b[i]) shared.push(a[i]);
+    else diff.push([a[i],b[i]]);
+  }
+  const sharedText=shared.length?shared.map(x=>AXIS_TRAITS[x]).join('・'):'なし（全軸が異なります）';
+  const diffText=diff.length?diff.map(d=>`${d[0]}(${AXIS_TRAITS[d[0]]}) vs ${d[1]}(${AXIS_TRAITS[d[1]]})`).join('<br>'):'なし（完全に同タイプ）';
+
+  document.getElementById('rc').innerHTML=`
+    <div class="rt">
+      <div><div class="rb">${a}</div><div class="rn">（${nA}）</div></div>
+      <span style="font-size:1.6rem;">💕</span>
+      <div><div class="rb">${b}</div><div class="rn">（${nB}）</div></div>
+    </div>
+    <div class="rscore">
+      <div class="num">${score}<span style="font-size:1.5rem;color:var(--text-muted)">/5</span></div>
+      <div class="hearts">${base.hearts}</div>
+      <div class="rlabel">${base.label}</div>
+    </div>
+    <div class="secs">
+      <div class="sec">
+        <h3>✅ 相性の良いポイント</h3>
+        <p>${base.good}</p>
+      </div>
+      <div class="sec">
+        <h3>🔍 二人の共通点</h3>
+        <p>${sharedText}</p>
+      </div>
+      <div class="sec">
+        <h3>⚡ 二人の違い（成長のチャンス）</h3>
+        <p style="font-size:.82rem;line-height:2;">${diffText}</p>
+      </div>
+      <div class="sec">
+        <h3>⚠️ 注意すべきポイント</h3>
+        <p>${base.bad}</p>
+      </div>
+      <div class="sec">
+        <h3>🎁 二人のラッキーアイテム</h3>
+        <div class="lucky-row">
+          ${pd.lucky.map(l=>`<span class="lbadge">✨ ${l}</span>`).join('')}
+        </div>
+        <p style="font-size:.8rem;color:var(--text-muted);margin-top:10px;">💑 おすすめデートスポット：${pd.date}</p>
+      </div>
+      <div class="sec">
+        <h3>💡 うまくいくための3つのアドバイス</h3>
+        <ul class="advice-list">
+          ${pd.advice.map(a=>`<li>${a}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  document.getElementById('result').style.display='';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderMatrix(){
+  const tbl=document.getElementById('mx');
+  let html='<tr><th></th>';
+  ALL.forEach(t=>html+=`<th>${t}</th>`);
+  html+='</tr>';
+  ALL.forEach(a=>{
+    html+=`<tr><th>${a}</th>`;
+    ALL.forEach(b=>{
+      const s=CD[a][b];
+      html+=`<td class="s${s}" onclick="quick('${a}','${b}')" title="${a}×${b}：${s}/5">${s}</td>`;
+    });
+    html+='</tr>';
+  });
+  tbl.innerHTML=html;
+}
+
+function quick(a,b){
+  document.getElementById('ta').value=a;
+  document.getElementById('tb').value=b;
+  check();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+window.addEventListener('load',()=>{
+  initSelects();
+  renderMatrix();
+  const p=new URLSearchParams(location.search);
+  const t=p.get('type');
+  if(t&&CD[t]) document.getElementById('ta').value=t;
+});
+</script>
 </body>
 </html>

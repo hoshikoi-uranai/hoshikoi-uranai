@@ -9,443 +9,276 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
-    /* ---- MBTIページ固有スタイル ---- */
-    .mbti-hero {
-      text-align: center;
-      padding: 48px 20px 32px;
-      background: linear-gradient(to bottom, rgba(80,40,160,.3), transparent);
-      border-bottom: 1px solid rgba(180,140,255,.15);
-    }
-    .mbti-hero .site-subtitle { font-size:.75rem; letter-spacing:.3em; color:var(--text-muted); margin-bottom:8px; }
-    .mbti-hero h1 { font-family:'Cinzel',serif; font-size:clamp(1.6rem,5vw,2.8rem); background:linear-gradient(135deg,var(--gold),var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:.12em; margin-bottom:10px; }
-    .mbti-hero p { color:var(--text-muted); font-size:.9rem; line-height:1.9; }
+    .mbti-hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(to bottom,rgba(80,40,160,.3),transparent);border-bottom:1px solid rgba(180,140,255,.15);}
+    .mbti-hero .bc{font-size:.75rem;letter-spacing:.2em;color:var(--text-muted);margin-bottom:8px;}
+    .mbti-hero h1{font-family:'Cinzel',serif;font-size:clamp(1.6rem,5vw,2.8rem);background:linear-gradient(135deg,var(--gold),var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.12em;margin-bottom:10px;}
+    .mbti-hero p{color:var(--text-muted);font-size:.9rem;line-height:1.9;}
+    .sw{max-width:760px;margin:0 auto;padding:24px 16px 60px;position:relative;z-index:1;}
+    .sec-title{text-align:center;font-size:1.2rem;color:var(--accent);letter-spacing:.1em;margin-bottom:24px;}
 
-    /* ---- モード選択 ---- */
-    .mode-select {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 32px 16px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .mode-btn {
-      flex: 1;
-      min-width: 240px;
-      padding: 24px 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      cursor: pointer;
-      text-align: center;
-      transition: all .2s;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .mode-btn:hover { background:rgba(180,140,255,.08); border-color:var(--accent); transform:translateY(-3px); }
-    .mode-btn .mode-icon { font-size:2.4rem; margin-bottom:12px; }
-    .mode-btn h2 { font-size:1.1rem; color:var(--accent); margin-bottom:8px; }
-    .mode-btn p { font-size:.8rem; color:var(--text-muted); line-height:1.7; }
+    /* モード選択 */
+    #mode-section .mode-grid{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:24px 0;}
+    .mode-btn{flex:1;min-width:220px;max-width:300px;padding:28px 20px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text);font-family:'Noto Serif JP',serif;}
+    .mode-btn:hover{background:rgba(180,140,255,.1);border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 30px rgba(180,140,255,.15);}
+    .mode-btn .mi{font-size:2.6rem;margin-bottom:14px;}
+    .mode-btn h2{font-size:1.05rem;color:var(--accent);margin-bottom:8px;letter-spacing:.05em;}
+    .mode-btn p{font-size:.78rem;color:var(--text-muted);line-height:1.7;}
 
-    /* ---- セクション共通 ---- */
-    .section-wrap { max-width:760px; margin:0 auto; padding:0 16px 60px; position:relative; z-index:1; }
-    .section-title { text-align:center; font-size:1.3rem; color:var(--accent); letter-spacing:.1em; margin-bottom:28px; padding-top:16px; }
+    /* 質問 */
+    .prog-wrap{background:rgba(255,255,255,.06);border-radius:20px;height:6px;overflow:hidden;margin-bottom:6px;}
+    .prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:20px;transition:width .4s;}
+    .prog-label{text-align:right;font-size:.72rem;color:var(--text-muted);margin-bottom:20px;}
+    .q-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:28px 24px;}
+    .q-axis{font-size:.68rem;letter-spacing:.2em;color:var(--text-muted);margin-bottom:10px;}
+    .q-text{font-size:1rem;line-height:1.9;margin-bottom:22px;color:var(--text);}
+    .choices{display:flex;flex-direction:column;gap:10px;}
+    .cbtn{padding:14px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(180,140,255,.2);border-radius:10px;color:var(--text);font-size:.88rem;cursor:pointer;text-align:left;transition:all .15s;font-family:'Noto Serif JP',serif;line-height:1.6;}
+    .cbtn:hover{background:rgba(180,140,255,.1);border-color:var(--accent);}
+    .cbtn.selected{background:rgba(200,159,255,.15);border-color:var(--accent);color:var(--accent);}
+    .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;}
+    .nbtn{padding:10px 24px;border-radius:30px;border:1px solid rgba(180,140,255,.3);background:transparent;color:var(--text-muted);cursor:pointer;font-family:'Noto Serif JP',serif;font-size:.85rem;transition:all .2s;}
+    .nbtn:hover{border-color:var(--accent);color:var(--accent);}
+    .nbtn.primary{background:linear-gradient(135deg,#8b5cf6,#ec4899);border:none;color:white;padding:10px 28px;}
+    .nbtn:disabled{opacity:.3;cursor:default;}
 
-    /* ---- 質問診断 ---- */
-    #quiz-section { display:none; }
-    .progress-bar-wrap { background:rgba(255,255,255,.06); border-radius:20px; height:6px; margin-bottom:28px; overflow:hidden; }
-    .progress-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:20px; transition:width .4s; }
-    .progress-label { text-align:right; font-size:.75rem; color:var(--text-muted); margin-top:6px; }
+    /* タイプ選択 */
+    .tg-title{font-size:.78rem;letter-spacing:.2em;color:var(--text-muted);margin-bottom:12px;}
+    .tg{margin-bottom:20px;}
+    .type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .tc{padding:14px 6px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;text-align:center;cursor:pointer;transition:all .2s;display:block;text-decoration:none;}
+    .tc:hover{background:rgba(180,140,255,.1);border-color:var(--accent);transform:translateY(-2px);}
+    .tc .code{font-family:'Cinzel',serif;font-size:.95rem;color:var(--accent);font-weight:700;}
+    .tc .nick{font-size:.62rem;color:var(--text-muted);margin-top:4px;line-height:1.4;}
 
-    .question-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:28px 24px; margin-bottom:20px; }
-    .question-card .q-axis { font-size:.7rem; letter-spacing:.2em; color:var(--text-muted); margin-bottom:10px; }
-    .question-card .q-text { font-size:1.05rem; line-height:1.9; margin-bottom:20px; }
-    .choices { display:flex; flex-direction:column; gap:10px; }
-    .choice-btn {
-      padding:12px 18px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(180,140,255,.2);
-      border-radius:10px;
-      color:var(--text);
-      font-size:.9rem;
-      cursor:pointer;
-      text-align:left;
-      transition:all .15s;
-      font-family:'Noto Serif JP',serif;
-      line-height:1.6;
-    }
-    .choice-btn:hover { background:rgba(180,140,255,.1); border-color:var(--accent); }
-    .choice-btn.selected { background:rgba(200,159,255,.15); border-color:var(--accent); color:var(--accent); }
+    /* 結果 */
+    .res-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px 24px;text-align:center;margin-bottom:20px;}
+    .res-type{font-family:'Cinzel',serif;font-size:3rem;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .res-nick{font-size:1.1rem;color:var(--accent2);margin:8px 0 20px;}
+    .res-desc{font-size:.9rem;line-height:2;color:var(--text);text-align:left;}
+    .rtags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;}
+    .rtag{font-size:.72rem;padding:4px 12px;border-radius:20px;background:rgba(200,159,255,.1);border:1px solid rgba(200,159,255,.25);color:var(--accent);}
+    .scores{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+    .si{background:rgba(255,255,255,.03);border-radius:10px;padding:12px;text-align:center;}
+    .sl{font-size:.7rem;color:var(--text-muted);letter-spacing:.08em;margin-bottom:6px;}
+    .sbw{background:rgba(255,255,255,.06);border-radius:10px;height:8px;overflow:hidden;margin-bottom:4px;}
+    .sb{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--accent2),transparent);}
+    .sp2{font-size:.75rem;color:var(--gold);}
+    .cbtn-wrap{text-align:center;margin-top:24px;}
+    .compat-btn{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;text-decoration:none;border-radius:50px;font-size:.95rem;letter-spacing:.08em;box-shadow:0 4px 20px rgba(139,92,246,.3);transition:all .2s;}
+    .compat-btn:hover{opacity:.9;transform:translateY(-2px);}
+    .retry{display:block;text-align:center;margin-top:14px;color:var(--text-muted);font-size:.82rem;cursor:pointer;border:none;background:transparent;font-family:'Noto Serif JP',serif;}
+    .retry:hover{color:var(--accent);}
 
-    .quiz-nav { display:flex; justify-content:space-between; align-items:center; margin-top:20px; }
-    .nav-btn { padding:10px 24px; border-radius:30px; border:1px solid rgba(180,140,255,.3); background:transparent; color:var(--text-muted); cursor:pointer; font-family:'Noto Serif JP',serif; font-size:.85rem; transition:all .2s; }
-    .nav-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .nav-btn.primary { background:linear-gradient(135deg,#8b5cf6,#ec4899); border:none; color:white; padding:10px 28px; }
-    .nav-btn:disabled { opacity:.3; cursor:default; }
-
-    /* ---- タイプ選択 ---- */
-    #select-section { display:none; }
-    .type-groups { display:flex; flex-direction:column; gap:20px; }
-    .type-group-title { font-size:.8rem; letter-spacing:.2em; color:var(--text-muted); margin-bottom:12px; }
-    .type-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .type-card {
-      padding:14px 8px;
-      background:var(--card-bg);
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      text-align:center;
-      cursor:pointer;
-      transition:all .2s;
-      text-decoration:none;
-      display:block;
-    }
-    .type-card:hover { background:rgba(180,140,255,.1); border-color:var(--accent); transform:translateY(-2px); }
-    .type-card .type-code { font-family:'Cinzel',serif; font-size:1rem; color:var(--accent); font-weight:700; }
-    .type-card .type-nick { font-size:.65rem; color:var(--text-muted); margin-top:4px; line-height:1.4; }
-
-    /* ---- 結果 ---- */
-    #result-section { display:none; }
-    .result-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:32px 24px; text-align:center; margin-bottom:24px; }
-    .result-type { font-family:'Cinzel',serif; font-size:3rem; background:linear-gradient(135deg,var(--gold),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .result-nick { font-size:1.1rem; color:var(--accent2); margin:8px 0 20px; }
-    .result-desc { font-size:.9rem; line-height:2; color:var(--text); text-align:left; }
-    .result-tags { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:16px 0; }
-    .tag { font-size:.72rem; padding:4px 12px; border-radius:20px; background:rgba(200,159,255,.1); border:1px solid rgba(200,159,255,.25); color:var(--accent); }
-
-    .scores { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0; }
-    .score-item { background:rgba(255,255,255,.03); border-radius:10px; padding:12px; text-align:center; }
-    .score-label { font-size:.7rem; color:var(--text-muted); letter-spacing:.1em; margin-bottom:6px; }
-    .score-bar-wrap { background:rgba(255,255,255,.06); border-radius:10px; height:8px; overflow:hidden; margin-bottom:4px; }
-    .score-bar-left { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--accent),transparent); float:right; }
-    .score-bar-right { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--accent2),transparent); }
-    .score-pct { font-size:.75rem; color:var(--gold); }
-
-    .compat-btn-wrap { text-align:center; margin-top:24px; }
-    .compat-btn { display:inline-block; padding:14px 36px; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:white; text-decoration:none; border-radius:50px; font-size:.95rem; letter-spacing:.08em; box-shadow:0 4px 20px rgba(139,92,246,.3); transition:all .2s; }
-    .compat-btn:hover { opacity:.9; transform:translateY(-2px); }
-    .retry-btn { display:block; text-align:center; margin-top:16px; color:var(--text-muted); font-size:.82rem; cursor:pointer; border:none; background:transparent; font-family:'Noto Serif JP',serif; }
-    .retry-btn:hover { color:var(--accent); }
-
-    @media(max-width:500px) {
-      .type-grid { grid-template-columns:repeat(2,1fr); }
-      .scores { grid-template-columns:1fr; }
-    }
+    .hidden{display:none!important;}
+    @media(max-width:500px){.type-grid{grid-template-columns:repeat(2,1fr);}.scores{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
-  <div class="stars-bg"></div>
+<div class="stars-bg"></div>
 
-  <!-- ヘッダー -->
-  <div class="mbti-hero">
-    <p class="site-subtitle"><a href="../index.html" style="color:inherit;text-decoration:none;">✦ 星恋占い</a> / MBTI恋愛診断</p>
-    <h1>💫 MBTI 恋愛診断</h1>
-    <p>あなたの恋愛スタイルを16タイプで解き明かす<br>運命の相手との相性も診断できます</p>
+<div class="mbti-hero">
+  <p class="bc"><a href="../index.html" style="color:inherit;text-decoration:none;">✦ 星恋占い</a> / MBTI恋愛診断</p>
+  <h1>💫 MBTI 恋愛診断</h1>
+  <p>あなたの恋愛スタイルを16タイプで解き明かす<br>運命の相手との相性も診断できます</p>
+</div>
+
+<!-- モード選択 -->
+<div id="mode-section" class="sw">
+  <div class="sec-title">診断方法を選んでください</div>
+  <div class="mode-grid">
+    <button class="mode-btn" onclick="showQuiz()">
+      <div class="mi">🔮</div>
+      <h2>質問から診断する</h2>
+      <p>20の質問に答えて<br>あなたのMBTIタイプを診断</p>
+    </button>
+    <button class="mode-btn" onclick="showSelect()">
+      <div class="mi">⭐</div>
+      <h2>タイプを知っている</h2>
+      <p>すでにMBTIを知っている方は<br>直接タイプを選んで相性チェック</p>
+    </button>
   </div>
+</div>
 
-  <!-- モード選択 -->
-  <div id="mode-section">
-    <div class="mode-select">
-      <div class="mode-btn" onclick="showQuiz()">
-        <div class="mode-icon">🔮</div>
-        <h2>質問から診断する</h2>
-        <p>20の質問に答えて<br>あなたのMBTIタイプを診断</p>
-      </div>
-      <div class="mode-btn" onclick="showSelect()">
-        <div class="mode-icon">⭐</div>
-        <h2>タイプを知っている</h2>
-        <p>すでにMBTIを知っている方は<br>直接タイプを選んで相性チェック</p>
-      </div>
+<!-- 質問診断 -->
+<div id="quiz-section" class="sw hidden">
+  <div class="sec-title">🔮 恋愛MBTIを診断する</div>
+  <div class="prog-wrap"><div class="prog-bar" id="prog" style="width:5%"></div></div>
+  <div class="prog-label" id="prog-label">1 / 20</div>
+  <div id="q-container"></div>
+  <div class="qnav">
+    <button class="nbtn" id="prev-btn" onclick="prevQ()" disabled>← 前へ</button>
+    <button class="nbtn primary" id="next-btn" onclick="nextQ()">次へ →</button>
+  </div>
+  <p style="text-align:center;margin-top:16px"><button class="retry" onclick="showMode()">← 最初に戻る</button></p>
+</div>
+
+<!-- タイプ選択 -->
+<div id="select-section" class="sw hidden">
+  <div class="sec-title">⭐ タイプを選ぶ</div>
+  <div class="tg"><div class="tg-title">🔥 分析家タイプ（NT）</div>
+    <div class="type-grid">
+      <button class="tc" onclick="goResult('INTJ')"><div class="code">INTJ</div><div class="nick">建築家</div></button>
+      <button class="tc" onclick="goResult('INTP')"><div class="code">INTP</div><div class="nick">論理学者</div></button>
+      <button class="tc" onclick="goResult('ENTJ')"><div class="code">ENTJ</div><div class="nick">指揮官</div></button>
+      <button class="tc" onclick="goResult('ENTP')"><div class="code">ENTP</div><div class="nick">討論者</div></button>
     </div>
   </div>
-
-  <!-- 質問診断セクション -->
-  <div id="quiz-section" class="section-wrap">
-    <h2 class="section-title">🔮 恋愛MBTIを診断する</h2>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progress-bar" style="width:5%"></div>
+  <div class="tg"><div class="tg-title">💜 外交官タイプ（NF）</div>
+    <div class="type-grid">
+      <button class="tc" onclick="goResult('INFJ')"><div class="code">INFJ</div><div class="nick">提唱者</div></button>
+      <button class="tc" onclick="goResult('INFP')"><div class="code">INFP</div><div class="nick">仲介者</div></button>
+      <button class="tc" onclick="goResult('ENFJ')"><div class="code">ENFJ</div><div class="nick">主人公</div></button>
+      <button class="tc" onclick="goResult('ENFP')"><div class="code">ENFP</div><div class="nick">広報運動家</div></button>
     </div>
-    <div class="progress-label" id="progress-label">1 / 20</div>
-    <div id="question-container"></div>
-    <div class="quiz-nav">
-      <button class="nav-btn" id="prev-btn" onclick="prevQ()" disabled>← 前へ</button>
-      <button class="nav-btn primary" id="next-btn" onclick="nextQ()">次へ →</button>
-    </div>
-    <p style="text-align:center;margin-top:20px"><button class="retry-btn" onclick="showMode()">← 最初に戻る</button></p>
   </div>
-
-  <!-- タイプ選択セクション -->
-  <div id="select-section" class="section-wrap">
-    <h2 class="section-title">⭐ タイプを選ぶ</h2>
-    <div class="type-groups">
-      <div>
-        <div class="type-group-title">🔥 分析家タイプ（NT）</div>
-        <div class="type-grid">
-          <a class="type-card" href="result.html#INTJ" onclick="goResult('INTJ')"><div class="type-code">INTJ</div><div class="type-nick">建築家</div></a>
-          <a class="type-card" href="result.html#INTP" onclick="goResult('INTP')"><div class="type-code">INTP</div><div class="type-nick">論理学者</div></a>
-          <a class="type-card" href="result.html#ENTJ" onclick="goResult('ENTJ')"><div class="type-code">ENTJ</div><div class="type-nick">指揮官</div></a>
-          <a class="type-card" href="result.html#ENTP" onclick="goResult('ENTP')"><div class="type-code">ENTP</div><div class="type-nick">討論者</div></a>
-        </div>
-      </div>
-      <div>
-        <div class="type-group-title">💜 外交官タイプ（NF）</div>
-        <div class="type-grid">
-          <a class="type-card" href="result.html#INFJ" onclick="goResult('INFJ')"><div class="type-code">INFJ</div><div class="type-nick">提唱者</div></a>
-          <a class="type-card" href="result.html#INFP" onclick="goResult('INFP')"><div class="type-code">INFP</div><div class="type-nick">仲介者</div></a>
-          <a class="type-card" href="result.html#ENFJ" onclick="goResult('ENFJ')"><div class="type-code">ENFJ</div><div class="type-nick">主人公</div></a>
-          <a class="type-card" href="result.html#ENFP" onclick="goResult('ENFP')"><div class="type-code">ENFP</div><div class="type-nick">広報運動家</div></a>
-        </div>
-      </div>
-      <div>
-        <div class="type-group-title">🛡️ 番人タイプ（SJ）</div>
-        <div class="type-grid">
-          <a class="type-card" href="result.html#ISTJ" onclick="goResult('ISTJ')"><div class="type-code">ISTJ</div><div class="type-nick">管理者</div></a>
-          <a class="type-card" href="result.html#ISFJ" onclick="goResult('ISFJ')"><div class="type-code">ISFJ</div><div class="type-nick">擁護者</div></a>
-          <a class="type-card" href="result.html#ESTJ" onclick="goResult('ESTJ')"><div class="type-code">ESTJ</div><div class="type-nick">幹部</div></a>
-          <a class="type-card" href="result.html#ESFJ" onclick="goResult('ESFJ')"><div class="type-code">ESFJ</div><div class="type-nick">領事館</div></a>
-        </div>
-      </div>
-      <div>
-        <div class="type-group-title">⚡ 探検家タイプ（SP）</div>
-        <div class="type-grid">
-          <a class="type-card" href="result.html#ISTP" onclick="goResult('ISTP')"><div class="type-code">ISTP</div><div class="type-nick">巨匠</div></a>
-          <a class="type-card" href="result.html#ISFP" onclick="goResult('ISFP')"><div class="type-code">ISFP</div><div class="type-nick">冒険家</div></a>
-          <a class="type-card" href="result.html#ESTP" onclick="goResult('ESTP')"><div class="type-code">ESTP</div><div class="type-nick">起業家</div></a>
-          <a class="type-card" href="result.html#ESFP" onclick="goResult('ESFP')"><div class="type-code">ESFP</div><div class="type-nick">エンターテイナー</div></a>
-        </div>
-      </div>
+  <div class="tg"><div class="tg-title">🛡️ 番人タイプ（SJ）</div>
+    <div class="type-grid">
+      <button class="tc" onclick="goResult('ISTJ')"><div class="code">ISTJ</div><div class="nick">管理者</div></button>
+      <button class="tc" onclick="goResult('ISFJ')"><div class="code">ISFJ</div><div class="nick">擁護者</div></button>
+      <button class="tc" onclick="goResult('ESTJ')"><div class="code">ESTJ</div><div class="nick">幹部</div></button>
+      <button class="tc" onclick="goResult('ESFJ')"><div class="code">ESFJ</div><div class="nick">領事</div></button>
     </div>
-    <p style="text-align:center;margin-top:28px"><button class="retry-btn" onclick="showMode()">← 最初に戻る</button></p>
   </div>
-
-  <!-- 結果セクション -->
-  <div id="result-section" class="section-wrap">
-    <h2 class="section-title">✨ 診断結果</h2>
-    <div class="result-card" id="result-card"></div>
-    <div class="compat-btn-wrap">
-      <a href="compatibility.html" id="compat-link" class="compat-btn">💕 相性を診断する</a>
+  <div class="tg"><div class="tg-title">⚡ 探検家タイプ（SP）</div>
+    <div class="type-grid">
+      <button class="tc" onclick="goResult('ISTP')"><div class="code">ISTP</div><div class="nick">巨匠</div></button>
+      <button class="tc" onclick="goResult('ISFP')"><div class="code">ISFP</div><div class="nick">冒険家</div></button>
+      <button class="tc" onclick="goResult('ESTP')"><div class="code">ESTP</div><div class="nick">起業家</div></button>
+      <button class="tc" onclick="goResult('ESFP')"><div class="code">ESFP</div><div class="nick">エンターテイナー</div></button>
     </div>
-    <p style="text-align:center;margin-top:16px">
-      <button class="retry-btn" onclick="showMode()">← もう一度診断する</button>
-    </p>
   </div>
+  <p style="text-align:center;margin-top:20px"><button class="retry" onclick="showMode()">← 最初に戻る</button></p>
+</div>
 
-  <footer style="position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(180,140,255,.1);color:var(--text-muted);font-size:.8rem;line-height:2;">
-    <p><a href="../index.html" style="color:var(--text-muted);text-decoration:none;">← 星恋占いトップへ戻る</a></p>
-    <p style="margin-top:8px;">© 星恋占い — MBTI恋愛診断</p>
-    <p style="font-size:.7rem;opacity:.6;">本診断はエンタメ目的のオリジナルコンテンツです</p>
-  </footer>
+<!-- 結果 -->
+<div id="result-section" class="sw hidden">
+  <div class="sec-title">✨ 診断結果</div>
+  <div class="res-card" id="result-card"></div>
+  <div class="cbtn-wrap">
+    <a id="compat-link" href="compatibility.html" class="compat-btn">💕 相性を診断する</a>
+  </div>
+  <p style="text-align:center;margin-top:16px">
+    <button class="retry" onclick="showMode()">← もう一度診断する</button>
+  </p>
+</div>
 
-  <script>
-  // =====================
-  // 質問データ
-  // =====================
-  const QUESTIONS = [
-    // E/I 軸 (5問)
-    { axis:"E/I", text:"好きな人に気持ちを伝えるとき、どちらに近いですか？", a:"自分から積極的にアプローチする", b:"相手が気づいてくれるのをそっと待つ", aAxis:"E", bAxis:"I" },
-    { axis:"E/I", text:"休日、恋人と過ごすなら？", a:"友人も巻き込んでにぎやかに過ごしたい", b:"二人だけの静かな時間を大切にしたい", aAxis:"E", bAxis:"I" },
-    { axis:"E/I", text:"好きな人と初めてデートするとき、", a:"どんどん話しかけて楽しい雰囲気を作る", b:"相手の話をじっくり聞いてから心を開く", aAxis:"E", bAxis:"I" },
-    { axis:"E/I", text:"失恋したあと立ち直るには？", a:"友達と会って話すと元気が出る", b:"一人の時間をとって自分と向き合う", aAxis:"E", bAxis:"I" },
-    { axis:"E/I", text:"恋愛の悩みを抱えたとき、", a:"誰かに相談してすっきりしたい", b:"自分の中で整理してから動く", aAxis:"E", bAxis:"I" },
-    // S/N 軸 (5問)
-    { axis:"S/N", text:"パートナーへのプレゼントを選ぶとき、", a:"相手が実際に使えるものを選ぶ", b:"二人の思い出や象徴になるものを選ぶ", aAxis:"S", bAxis:"N" },
-    { axis:"S/N", text:"付き合いたての頃、どちらが楽しい？", a:"一緒に過ごした具体的な時間・思い出", b:"この人とどんな未来を描けるかのワクワク感", aAxis:"S", bAxis:"N" },
-    { axis:"S/N", text:"相手のことを好きになるきっかけは？", a:"実際の行動・言葉など具体的なこと", b:"なんとなく感じる雰囲気・可能性", aAxis:"S", bAxis:"N" },
-    { axis:"S/N", text:"長く続く恋愛に大切なのは？", a:"日々の積み重ねと信頼感", b:"共通のビジョンや価値観", aAxis:"S", bAxis:"N" },
-    { axis:"S/N", text:"デートプランを決めるとき、", a:"行きたい場所・食べたいものを具体的にリストアップ", b:"「こんな雰囲気の一日」というイメージから発想する", aAxis:"S", bAxis:"N" },
-    // T/F 軸 (5問)
-    { axis:"T/F", text:"恋人が落ち込んでいるとき、あなたは？", a:"原因を分析して解決策を提案する", b:"まず共感して気持ちに寄り添う", aAxis:"T", bAxis:"F" },
-    { axis:"T/F", text:"好きな人を選ぶ基準は？", a:"価値観・将来性など客観的な条件", b:"一緒にいて感じる感情・心地よさ", aAxis:"T", bAxis:"F" },
-    { axis:"T/F", text:"恋人と喧嘩したあと、", a:"何がいけなかったか論理的に振り返る", b:"お互いの感情がどう動いたかを確認する", aAxis:"T", bAxis:"F" },
-    { axis:"T/F", text:"遠距離恋愛の判断を迫られたら？", a:"現実的なメリット・デメリットで判断する", b:"相手への気持ちの強さで判断する", aAxis:"T", bAxis:"F" },
-    { axis:"T/F", text:"恋人に「正直に言って」と聞かれたら？", a:"多少傷ついても本当のことを伝える", b:"相手の気持ちを考えて言い方を工夫する", aAxis:"T", bAxis:"F" },
-    // J/P 軸 (5問)
-    { axis:"J/P", text:"恋人との記念日は？", a:"前もって計画を立てて完璧に準備する", b:"その日の気分でサプライズ的に動く", aAxis:"J", bAxis:"P" },
-    { axis:"J/P", text:"付き合うかどうか決めるとき、", a:"関係の方向性をはっきりさせてから動く", b:"とりあえず一緒にいる時間を楽しむ", aAxis:"J", bAxis:"P" },
-    { axis:"J/P", text:"恋愛のペースは？", a:"段階を踏んで着実に関係を深めたい", b:"流れに身をまかせて自然に進展させたい", aAxis:"J", bAxis:"P" },
-    { axis:"J/P", text:"好きな人ができたとき、", a:"どう行動するか戦略を立てる", b:"まず気持ちに正直に動いてみる", aAxis:"J", bAxis:"P" },
-    { axis:"J/P", text:"二人の将来について、", a:"早めに話し合って方向性を決めたい", b:"今を大切にしながら自然と決まればいい", aAxis:"J", bAxis:"P" },
-  ];
+<footer style="position:relative;z-index:1;text-align:center;padding:32px 20px;border-top:1px solid rgba(180,140,255,.1);color:var(--text-muted);font-size:.8rem;line-height:2;">
+  <p><a href="../index.html" style="color:var(--text-muted);text-decoration:none;">← 星恋占いトップへ戻る</a></p>
+  <p style="margin-top:8px;">© 星恋占い — MBTI恋愛診断</p>
+  <p style="font-size:.7rem;opacity:.6;">本診断はエンタメ目的のオリジナルコンテンツです</p>
+</footer>
 
-  // =====================
-  // タイプデータ
-  // =====================
-  const TYPES = {
-    INTJ:{ nick:"建築家", emoji:"🏛️", love:"計画的かつ深い絆を求めるタイプ。軽い恋愛より、お互いを高め合えるパートナーシップを望みます。感情表現は少なめですが、一度心を開いたら揺るぎない愛情を注ぎます。", tags:["深い絆重視","計画的アプローチ","少数精鋭な愛情"], weak:"感情表現が苦手で、相手を困惑させることも。", best:["ENFP","ENTP"] },
-    INTP:{ nick:"論理学者", emoji:"🔭", love:"理論的に恋愛を考えすぎてしまうことも。相手の気持ちより論理を優先しがちですが、心を開いた相手には誠実で知的な会話が絶えない関係を築きます。", tags:["知的会話重視","自由な時間が必要","じっくり深まる愛"], weak:"感情的な要求に戸惑いやすい。", best:["ENFJ","ENTJ"] },
-    ENTJ:{ nick:"指揮官", emoji:"👑", love:"恋愛でもリーダーシップを発揮。頼りになる存在感と明確なビジョンで相手を引っ張ります。強引に見えることもありますが、パートナーを本気で支えようとする姿勢は確かです。", tags:["頼もしいリード","高い目標を共有","情熱的"], weak:"コントロールが強くなりすぎることも。", best:["INFP","INTP"] },
-    ENTP:{ nick:"討論者", emoji:"⚡", love:"刺激と変化を求めるロマンチスト。常に新鮮さを保つことが得意で、会話が尽きることがありません。慣れると真剣さが薄れて見えることも。", tags:["会話の達人","新鮮さを維持","アイデア豊富"], weak:"真剣さが伝わりにくい場面も。", best:["INFJ","INTJ"] },
-    INFJ:{ nick:"提唱者", emoji:"🌙", love:"深く一人の相手を愛する理想主義者。相手の内面に強く惹かれ、魂のつながりを求めます。傷つきやすい面もありますが、パートナーへの献身は本物です。", tags:["魂のつながり重視","深い共感力","一途な愛"], weak:"理想が高く傷つきやすい。", best:["ENTP","ENFP"] },
-    INFP:{ nick:"仲介者", emoji:"🌸", love:"夢と感情に従う純粋なロマンチスト。相手に深く感情移入し、全力で愛します。理想の恋愛像が強く、現実とのギャップに悩むことも。", tags:["純粋なロマンチスト","感情豊か","価値観最優先"], weak:"理想と現実のギャップに揺れやすい。", best:["ENFJ","ENTJ"] },
-    ENFJ:{ nick:"主人公", emoji:"🌟", love:"相手の成長と幸せのために全力を尽くすタイプ。温かく包容力があり、自然とみんなを引き寄せます。自分の気持ちより相手を優先しすぎることも。", tags:["包容力抜群","成長を応援","カリスマ的魅力"], weak:"自己犠牲になりやすい。", best:["INFP","ISFP"] },
-    ENFP:{ nick:"広報運動家", emoji:"🦋", love:"エネルギッシュな恋愛を楽しむフリースピリット。感情豊かで相手を喜ばせるのが得意。長期的な関係になると飽きてしまう不安を抱えることも。", tags:["感情豊か","熱狂的な愛","自由と愛情両立"], weak:"集中力が続きにくい面も。", best:["INTJ","INFJ"] },
-    ISTJ:{ nick:"管理者", emoji:"🏔️", love:"誠実さと安定感で相手を支えるタイプ。約束は必ず守り、地道に愛情を積み上げます。ロマンチックな演出より日常の安心感で愛を示します。", tags:["絶対的な誠実さ","安定した関係","約束を守る"], weak:"変化や感情表現が苦手。", best:["ESFP","ESTP"] },
-    ISFJ:{ nick:"擁護者", emoji:"🌿", love:"細やかな気配りで相手を包み込む愛情深いタイプ。見返りを求めず献身的に愛しますが、自分の気持ちを後回しにしがちです。", tags:["献身的な愛情","細やかな気配り","安心感No.1"], weak:"自分の気持ちを言えないことも。", best:["ESFP","ESTP"] },
-    ESTJ:{ nick:"幹部", emoji:"📋", love:"責任感と行動力で相手を守るタイプ。明確なコミュニケーションを好み、関係性をはっきりさせたい傾向があります。融通がきかないと思われることも。", tags:["責任感が強い","明確な関係を好む","行動で示す愛"], weak:"柔軟性が少なく見えることも。", best:["ISFP","ISTP"] },
-    ESFJ:{ nick:"領事", emoji:"🤝", love:"周りの調和を大切にするケア上手な恋人。相手の気持ちに敏感で、雰囲気を盛り上げるのが得意。承認欲求が強くなるときも。", tags:["調和重視","愛情表現豊か","社交的な恋愛"], weak:"承認を求めすぎることも。", best:["ISFP","INFP"] },
-    ISTP:{ nick:"巨匠", emoji:"🔧", love:"感情より行動で愛情を示すクールなタイプ。束縛を嫌い、自由な関係を好みます。言葉は少ないですが、いざというとき頼れる存在感があります。", tags:["行動で示す愛","自由な関係","クールな頼もしさ"], weak:"感情表現が少なく誤解されやすい。", best:["ESFJ","ESTJ"] },
-    ISFP:{ nick:"冒険家", emoji:"🎨", love:"五感で恋愛を楽しむ自由な芸術家。感情に素直で、瞬間瞬間を大切にします。将来より今この瞬間の恋愛を重視するため、将来の話が苦手です。", tags:["今この瞬間を大切に","感性豊か","自然体の愛"], weak:"将来の計画が苦手。", best:["ENFJ","ESFJ"] },
-    ESTP:{ nick:"起業家", emoji:"🚀", love:"スリルと刺激を求める行動派の恋愛スタイル。その場の雰囲気作りが得意で、デートを盛り上げます。長期的コミットに慎重な面もあります。", tags:["行動力抜群","刺激的なデート","瞬発力の愛"], weak:"長期的コミットが苦手なことも。", best:["ISFJ","ISTJ"] },
-    ESFP:{ nick:"エンターテイナー", emoji:"🎭", love:"恋愛をとことん楽しむムードメーカー。相手を笑顔にするのが大好きで、一緒にいると楽しい時間が続きます。深刻な話や未来の計画は少し苦手。", tags:["楽しい時間を演出","感情豊か","自由奔放な愛"], weak:"深刻な局面が苦手なことも。", best:["ISFJ","ISTJ"] },
-  };
+<script>
+const QUESTIONS=[
+  {axis:"E/I",text:"好きな人に気持ちを伝えるとき、どちらに近いですか？",a:"自分から積極的にアプローチする",b:"相手が気づいてくれるのをそっと待つ",aA:"E",bA:"I"},
+  {axis:"E/I",text:"休日、恋人と過ごすなら？",a:"友人も巻き込んでにぎやかに過ごしたい",b:"二人だけの静かな時間を大切にしたい",aA:"E",bA:"I"},
+  {axis:"E/I",text:"好きな人と初めてデートするとき、",a:"どんどん話しかけて楽しい雰囲気を作る",b:"相手の話をじっくり聞いてから心を開く",aA:"E",bA:"I"},
+  {axis:"E/I",text:"失恋したあと立ち直るには？",a:"友達と会って話すと元気が出る",b:"一人の時間をとって自分と向き合う",aA:"E",bA:"I"},
+  {axis:"E/I",text:"恋愛の悩みを抱えたとき、",a:"誰かに相談してすっきりしたい",b:"自分の中で整理してから動く",aA:"E",bA:"I"},
+  {axis:"S/N",text:"パートナーへのプレゼントを選ぶとき、",a:"相手が実際に使えるものを選ぶ",b:"二人の思い出や象徴になるものを選ぶ",aA:"S",bA:"N"},
+  {axis:"S/N",text:"付き合いたての頃、どちらが楽しい？",a:"一緒に過ごした具体的な時間・思い出",b:"この人とどんな未来を描けるかのワクワク感",aA:"S",bA:"N"},
+  {axis:"S/N",text:"相手のことを好きになるきっかけは？",a:"実際の行動・言葉など具体的なこと",b:"なんとなく感じる雰囲気・可能性",aA:"S",bA:"N"},
+  {axis:"S/N",text:"長く続く恋愛に大切なのは？",a:"日々の積み重ねと信頼感",b:"共通のビジョンや価値観",aA:"S",bA:"N"},
+  {axis:"S/N",text:"デートプランを決めるとき、",a:"行きたい場所・食べたいものを具体的にリストアップ",b:"「こんな雰囲気の一日」というイメージから発想する",aA:"S",bA:"N"},
+  {axis:"T/F",text:"恋人が落ち込んでいるとき、あなたは？",a:"原因を分析して解決策を提案する",b:"まず共感して気持ちに寄り添う",aA:"T",bA:"F"},
+  {axis:"T/F",text:"好きな人を選ぶ基準は？",a:"価値観・将来性など客観的な条件",b:"一緒にいて感じる感情・心地よさ",aA:"T",bA:"F"},
+  {axis:"T/F",text:"恋人と喧嘩したあと、",a:"何がいけなかったか論理的に振り返る",b:"お互いの感情がどう動いたかを確認する",aA:"T",bA:"F"},
+  {axis:"T/F",text:"遠距離恋愛の判断を迫られたら？",a:"現実的なメリット・デメリットで判断する",b:"相手への気持ちの強さで判断する",aA:"T",bA:"F"},
+  {axis:"T/F",text:"恋人に「正直に言って」と聞かれたら？",a:"多少傷ついても本当のことを伝える",b:"相手の気持ちを考えて言い方を工夫する",aA:"T",bA:"F"},
+  {axis:"J/P",text:"恋人との記念日は？",a:"前もって計画を立てて完璧に準備する",b:"その日の気分でサプライズ的に動く",aA:"J",bA:"P"},
+  {axis:"J/P",text:"付き合うかどうか決めるとき、",a:"関係の方向性をはっきりさせてから動く",b:"とりあえず一緒にいる時間を楽しむ",aA:"J",bA:"P"},
+  {axis:"J/P",text:"恋愛のペースは？",a:"段階を踏んで着実に関係を深めたい",b:"流れに身をまかせて自然に進展させたい",aA:"J",bA:"P"},
+  {axis:"J/P",text:"好きな人ができたとき、",a:"どう行動するか戦略を立てる",b:"まず気持ちに正直に動いてみる",aA:"J",bA:"P"},
+  {axis:"J/P",text:"二人の将来について、",a:"早めに話し合って方向性を決めたい",b:"今を大切にしながら自然と決まればいい",aA:"J",bA:"P"},
+];
 
-  // =====================
-  // 状態管理
-  // =====================
-  let currentQ = 0;
-  let answers = new Array(20).fill(null); // null=未回答, 'a'/'b'
-  let scores = { E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0 };
+const TYPES={
+  INTJ:{nick:"建築家",emoji:"🏛️",love:"計画的かつ深い絆を求めるタイプ。軽い恋愛より、お互いを高め合えるパートナーシップを望みます。感情表現は少なめですが、一度心を開いたら揺るぎない愛情を注ぎます。",tags:["深い絆重視","計画的アプローチ","少数精鋭な愛情"],weak:"感情表現が苦手で相手を困惑させることも。",best:["ENFP","ENTP"]},
+  INTP:{nick:"論理学者",emoji:"🔭",love:"理論的に恋愛を考えすぎてしまうことも。相手の気持ちより論理を優先しがちですが、心を開いた相手には誠実で知的な会話が絶えない関係を築きます。",tags:["知的会話重視","自由な時間が必要","じっくり深まる愛"],weak:"感情的な要求に戸惑いやすい。",best:["ENFJ","ENTJ"]},
+  ENTJ:{nick:"指揮官",emoji:"👑",love:"恋愛でもリーダーシップを発揮。頼りになる存在感と明確なビジョンで相手を引っ張ります。強引に見えることもありますが、パートナーを本気で支えようとする姿勢は確かです。",tags:["頼もしいリード","高い目標を共有","情熱的"],weak:"コントロールが強くなりすぎることも。",best:["INFP","INTP"]},
+  ENTP:{nick:"討論者",emoji:"⚡",love:"刺激と変化を求めるロマンチスト。常に新鮮さを保つことが得意で、会話が尽きることがありません。慣れると真剣さが薄れて見えることも。",tags:["会話の達人","新鮮さを維持","アイデア豊富"],weak:"真剣さが伝わりにくい場面も。",best:["INFJ","INTJ"]},
+  INFJ:{nick:"提唱者",emoji:"🌙",love:"深く一人の相手を愛する理想主義者。相手の内面に強く惹かれ、魂のつながりを求めます。傷つきやすい面もありますが、パートナーへの献身は本物です。",tags:["魂のつながり重視","深い共感力","一途な愛"],weak:"理想が高く傷つきやすい。",best:["ENTP","ENFP"]},
+  INFP:{nick:"仲介者",emoji:"🌸",love:"夢と感情に従う純粋なロマンチスト。相手に深く感情移入し、全力で愛します。理想の恋愛像が強く、現実とのギャップに悩むことも。",tags:["純粋なロマンチスト","感情豊か","価値観最優先"],weak:"理想と現実のギャップに揺れやすい。",best:["ENFJ","ENTJ"]},
+  ENFJ:{nick:"主人公",emoji:"🌟",love:"相手の成長と幸せのために全力を尽くすタイプ。温かく包容力があり、自然とみんなを引き寄せます。自分の気持ちより相手を優先しすぎることも。",tags:["包容力抜群","成長を応援","カリスマ的魅力"],weak:"自己犠牲になりやすい。",best:["INFP","ISFP"]},
+  ENFP:{nick:"広報運動家",emoji:"🦋",love:"エネルギッシュな恋愛を楽しむフリースピリット。感情豊かで相手を喜ばせるのが得意。長期的な関係になると飽きてしまう不安を抱えることも。",tags:["感情豊か","熱狂的な愛","自由と愛情両立"],weak:"集中力が続きにくい面も。",best:["INTJ","INFJ"]},
+  ISTJ:{nick:"管理者",emoji:"🏔️",love:"誠実さと安定感で相手を支えるタイプ。約束は必ず守り、地道に愛情を積み上げます。ロマンチックな演出より日常の安心感で愛を示します。",tags:["絶対的な誠実さ","安定した関係","約束を守る"],weak:"変化や感情表現が苦手。",best:["ESFP","ESTP"]},
+  ISFJ:{nick:"擁護者",emoji:"🌿",love:"細やかな気配りで相手を包み込む愛情深いタイプ。見返りを求めず献身的に愛しますが、自分の気持ちを後回しにしがちです。",tags:["献身的な愛情","細やかな気配り","安心感No.1"],weak:"自分の気持ちを言えないことも。",best:["ESFP","ESTP"]},
+  ESTJ:{nick:"幹部",emoji:"📋",love:"責任感と行動力で相手を守るタイプ。明確なコミュニケーションを好み、関係性をはっきりさせたい傾向があります。融通がきかないと思われることも。",tags:["責任感が強い","明確な関係を好む","行動で示す愛"],weak:"柔軟性が少なく見えることも。",best:["ISFP","ISTP"]},
+  ESFJ:{nick:"領事",emoji:"🤝",love:"周りの調和を大切にするケア上手な恋人。相手の気持ちに敏感で、雰囲気を盛り上げるのが得意。承認欲求が強くなるときも。",tags:["調和重視","愛情表現豊か","社交的な恋愛"],weak:"承認を求めすぎることも。",best:["ISFP","INFP"]},
+  ISTP:{nick:"巨匠",emoji:"🔧",love:"感情より行動で愛情を示すクールなタイプ。束縛を嫌い、自由な関係を好みます。言葉は少ないですが、いざというとき頼れる存在感があります。",tags:["行動で示す愛","自由な関係","クールな頼もしさ"],weak:"感情表現が少なく誤解されやすい。",best:["ESFJ","ESTJ"]},
+  ISFP:{nick:"冒険家",emoji:"🎨",love:"五感で恋愛を楽しむ自由な芸術家。感情に素直で、瞬間瞬間を大切にします。将来より今この瞬間の恋愛を重視するため、将来の話が苦手です。",tags:["今この瞬間を大切に","感性豊か","自然体の愛"],weak:"将来の計画が苦手。",best:["ENFJ","ESFJ"]},
+  ESTP:{nick:"起業家",emoji:"🚀",love:"スリルと刺激を求める行動派の恋愛スタイル。その場の雰囲気作りが得意で、デートを盛り上げます。長期的コミットに慎重な面もあります。",tags:["行動力抜群","刺激的なデート","瞬発力の愛"],weak:"長期的コミットが苦手なことも。",best:["ISFJ","ISTJ"]},
+  ESFP:{nick:"エンターテイナー",emoji:"🎭",love:"恋愛をとことん楽しむムードメーカー。相手を笑顔にするのが大好きで、一緒にいると楽しい時間が続きます。深刻な話や未来の計画は少し苦手。",tags:["楽しい時間を演出","感情豊か","自由奔放な愛"],weak:"深刻な局面が苦手なことも。",best:["ISFJ","ISTJ"]},
+};
 
-  // =====================
-  // 画面切り替え
-  // =====================
-  function showMode() {
-    document.getElementById('mode-section').style.display = '';
-    document.getElementById('quiz-section').style.display = 'none';
-    document.getElementById('select-section').style.display = 'none';
-    document.getElementById('result-section').style.display = 'none';
-    currentQ = 0;
-    answers = new Array(20).fill(null);
-  }
-  function showQuiz() {
-    document.getElementById('mode-section').style.display = 'none';
-    document.getElementById('quiz-section').style.display = '';
-    renderQ();
-  }
-  function showSelect() {
-    document.getElementById('mode-section').style.display = 'none';
-    document.getElementById('select-section').style.display = '';
-  }
-  function showResult(type) {
-    document.getElementById('quiz-section').style.display = 'none';
-    document.getElementById('select-section').style.display = 'none';
-    document.getElementById('mode-section').style.display = 'none';
-    document.getElementById('result-section').style.display = '';
-    renderResult(type);
-    // 相性ページへのリンクにタイプを渡す
-    document.getElementById('compat-link').href = `compatibility.html?type=${type}`;
-  }
+let cQ=0, answers=new Array(20).fill(null);
+let scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
 
-  // =====================
-  // 質問描画
-  // =====================
-  function renderQ() {
-    const q = QUESTIONS[currentQ];
-    const pct = Math.round((currentQ / 20) * 100) + 5;
-    document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-label').textContent = `${currentQ + 1} / 20`;
-
-    document.getElementById('question-container').innerHTML = `
-      <div class="question-card">
-        <div class="q-axis">軸：${q.axis}</div>
-        <div class="q-text">Q${currentQ + 1}. ${q.text}</div>
-        <div class="choices">
-          <button class="choice-btn ${answers[currentQ]==='a'?'selected':''}" onclick="selectAnswer('a')">A. ${q.a}</button>
-          <button class="choice-btn ${answers[currentQ]==='b'?'selected':''}" onclick="selectAnswer('b')">B. ${q.b}</button>
-        </div>
-      </div>
-    `;
-    document.getElementById('prev-btn').disabled = (currentQ === 0);
-    document.getElementById('next-btn').textContent = currentQ === 19 ? '結果を見る ✨' : '次へ →';
-  }
-
-  function selectAnswer(choice) {
-    answers[currentQ] = choice;
-    renderQ();
-  }
-
-  function prevQ() {
-    if (currentQ > 0) { currentQ--; renderQ(); }
-  }
-
-  function nextQ() {
-    if (answers[currentQ] === null) {
-      alert('回答を選んでください！');
-      return;
-    }
-    if (currentQ < 19) {
-      currentQ++;
-      renderQ();
-    } else {
-      calcResult();
-    }
-  }
-
-  // =====================
-  // 結果計算
-  // =====================
-  function calcResult() {
-    scores = { E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0 };
-    answers.forEach((ans, i) => {
-      const q = QUESTIONS[i];
-      if (ans === 'a') scores[q.aAxis]++;
-      else scores[q.bAxis]++;
-    });
-    const type =
-      (scores.E >= scores.I ? 'E' : 'I') +
-      (scores.S >= scores.N ? 'S' : 'N') +
-      (scores.T >= scores.F ? 'T' : 'F') +
-      (scores.J >= scores.P ? 'J' : 'P');
-    showResult(type);
-  }
-
-  // =====================
-  // 結果描画
-  // =====================
-  function renderResult(type) {
-    const d = TYPES[type];
-    if (!d) return;
-    const ePct = Math.round((scores.E / (scores.E + scores.I || 1)) * 100) || 50;
-    const sPct = Math.round((scores.S / (scores.S + scores.N || 1)) * 100) || 50;
-    const tPct = Math.round((scores.T / (scores.T + scores.F || 1)) * 100) || 50;
-    const jPct = Math.round((scores.J / (scores.J + scores.P || 1)) * 100) || 50;
-
-    document.getElementById('result-card').innerHTML = `
-      <div class="result-type">${d.emoji} ${type}</div>
-      <div class="result-nick">「${d.nick}」</div>
-      <div class="result-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-      <div class="result-desc">${d.love}</div>
-      <div class="scores">
-        <div class="score-item">
-          <div class="score-label">E ${ePct}% / I ${100-ePct}%</div>
-          <div class="score-bar-wrap"><div class="score-bar-right" style="width:${ePct}%"></div></div>
-          <div class="score-pct">${type[0]}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-label">S ${sPct}% / N ${100-sPct}%</div>
-          <div class="score-bar-wrap"><div class="score-bar-right" style="width:${sPct}%"></div></div>
-          <div class="score-pct">${type[1]}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-label">T ${tPct}% / F ${100-tPct}%</div>
-          <div class="score-bar-wrap"><div class="score-bar-right" style="width:${tPct}%"></div></div>
-          <div class="score-pct">${type[2]}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-label">J ${jPct}% / P ${100-jPct}%</div>
-          <div class="score-bar-wrap"><div class="score-bar-right" style="width:${jPct}%"></div></div>
-          <div class="score-pct">${type[3]}</div>
-        </div>
-      </div>
-      <p style="font-size:.82rem;color:var(--text-muted);margin-top:12px;">💑 ベスト相性：<strong style="color:var(--gold)">${d.best.join(' / ')}</strong></p>
-      <p style="font-size:.8rem;color:var(--text-muted);margin-top:8px;">⚠️ 注意点：${d.weak}</p>
-    `;
-  }
-
-  function goResult(type) {
-    // タイプ選択からの遷移はURLハッシュで渡す
-    scores = { E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0 };
-    // スコアをダミーで50%に設定
-    ['E','I','S','N','T','F','J','P'].forEach(k => scores[k] = 2);
-    showResult(type);
-    return false;
-  }
-
-  // URLハッシュからタイプ取得（タイプ選択から直接遷移した場合）
-  window.addEventListener('load', () => {
-    const hash = location.hash.replace('#','');
-    if (TYPES[hash]) goResult(hash);
+function show(id){
+  ['mode-section','quiz-section','select-section','result-section'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
   });
-  </script>
+}
+function showMode(){cQ=0;answers=new Array(20).fill(null);show('mode-section');}
+function showQuiz(){show('quiz-section');renderQ();}
+function showSelect(){show('select-section');}
+
+function renderQ(){
+  const q=QUESTIONS[cQ];
+  const pct=Math.round((cQ/20)*100)+5;
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`${cQ+1} / 20`;
+  document.getElementById('q-container').innerHTML=`
+    <div class="q-card">
+      <div class="q-axis">軸：${q.axis}　Q${cQ+1}/20</div>
+      <div class="q-text">${q.text}</div>
+      <div class="choices">
+        <button class="cbtn ${answers[cQ]==='a'?'selected':''}" onclick="sel('a')">A．${q.a}</button>
+        <button class="cbtn ${answers[cQ]==='b'?'selected':''}" onclick="sel('b')">B．${q.b}</button>
+      </div>
+    </div>`;
+  document.getElementById('prev-btn').disabled=(cQ===0);
+  document.getElementById('next-btn').textContent=cQ===19?'結果を見る ✨':'次へ →';
+}
+function sel(c){answers[cQ]=c;renderQ();}
+function prevQ(){if(cQ>0){cQ--;renderQ();}}
+function nextQ(){
+  if(!answers[cQ]){alert('回答を選んでください！');return;}
+  if(cQ<19){cQ++;renderQ();}else{calcResult();}
+}
+function calcResult(){
+  scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  answers.forEach((a,i)=>{const q=QUESTIONS[i];scores[a==='a'?q.aA:q.bA]++;});
+  const type=(scores.E>=scores.I?'E':'I')+(scores.S>=scores.N?'S':'N')+(scores.T>=scores.F?'T':'F')+(scores.J>=scores.P?'J':'P');
+  showResult(type);
+}
+function goResult(type){
+  scores={E:2,I:2,S:2,N:2,T:2,F:2,J:2,P:2};
+  showResult(type);
+}
+function showResult(type){
+  show('result-section');
+  const d=TYPES[type];
+  const eP=Math.round((scores.E/(scores.E+scores.I||1))*100)||50;
+  const sP=Math.round((scores.S/(scores.S+scores.N||1))*100)||50;
+  const tP=Math.round((scores.T/(scores.T+scores.F||1))*100)||50;
+  const jP=Math.round((scores.J/(scores.J+scores.P||1))*100)||50;
+  document.getElementById('result-card').innerHTML=`
+    <div class="res-type">${d.emoji} ${type}</div>
+    <div class="res-nick">「${d.nick}」</div>
+    <div class="rtags">${d.tags.map(t=>`<span class="rtag">${t}</span>`).join('')}</div>
+    <div class="res-desc">${d.love}</div>
+    <div class="scores">
+      <div class="si"><div class="sl">外向E ${eP}% ／ 内向I ${100-eP}%</div><div class="sbw"><div class="sb" style="width:${eP}%"></div></div><div class="sp2">${type[0]}</div></div>
+      <div class="si"><div class="sl">感覚S ${sP}% ／ 直観N ${100-sP}%</div><div class="sbw"><div class="sb" style="width:${sP}%"></div></div><div class="sp2">${type[1]}</div></div>
+      <div class="si"><div class="sl">思考T ${tP}% ／ 感情F ${100-tP}%</div><div class="sbw"><div class="sb" style="width:${tP}%"></div></div><div class="sp2">${type[2]}</div></div>
+      <div class="si"><div class="sl">判断J ${jP}% ／ 知覚P ${100-jP}%</div><div class="sbw"><div class="sb" style="width:${jP}%"></div></div><div class="sp2">${type[3]}</div></div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-muted);margin-top:12px;">💑 ベスト相性：<strong style="color:var(--gold)">${d.best.join(' ／ ')}</strong></p>
+    <p style="font-size:.8rem;color:var(--text-muted);margin-top:8px;">⚠️ 注意点：${d.weak}</p>`;
+  document.getElementById('compat-link').href=`compatibility.html?type=${type}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
 </body>
 </html>
