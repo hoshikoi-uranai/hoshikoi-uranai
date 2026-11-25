@@ -2,7 +2,19 @@ import os
 import json
 import datetime
 import shutil
+import time
+import signal
 from google import genai
+from google.genai import errors as genai_errors
+
+# APIタイムアウト時間（秒）
+API_TIMEOUT = 60
+
+class TimeoutError(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutError("API呼び出しがタイムアウトしました")
 
 # =============================
 # 設定
@@ -25,13 +37,27 @@ SIGNS = [
     {"name": "魚座",   "en": "pisces",    "period": "2/19〜3/20", "emoji": "♓"},
 ]
 
+# 日本時間（JST = UTC+9）を明示的に設定
 JST = datetime.timezone(datetime.timedelta(hours=9))
 
 def get_today():
-    return datetime.datetime.now(JST)
+    """
+    GitHub ActionsはUTC動作。
+    cron '0 18 * * *' = UTC 18:00 = JST 翌3:00 のため、
+    UTCの日付ではなくJSTの日付を明示的に取得する。
+    例: UTC 2026-11-21 18:00 → JST 2026-11-22 03:00 → 11月22日として生成
+    """
+    return datetime.datetime.now(datetime.timezone.utc).astimezone(JST)
 
-def generate_horoscope(date_str):
-    """Gemini APIで12星座分の占いをまとめて生成"""
+# 試すモデルの優先順位（上から順に試す、すべて無料枠対応）
+MODELS = [
+    "gemini-3.8-flash",       # メイン
+    "gemini-3.6-flash",       # フォールバック1
+    "gemini-3.5-flash-lite",  # フォールバック2
+]
+
+def generate_horoscope(date_str, max_retries=3, retry_wait=20):
+    """Gemini APIで12星座分の占いをまとめて生成（503エラー時はリトライ）"""
     sign_list = "、".join([s["name"] for s in SIGNS])
     prompt = f"""
 あなたはプロの占い師です。
@@ -54,17 +80,52 @@ def generate_horoscope(date_str):
 - 毎日異なる内容になるよう、今日の日付({date_str})を意識する
 - 神秘的で前向きなトーンにする
 """
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-lite",
-        contents=prompt
-    )
-    text = response.text.strip()
-    # コードブロックがあれば除去
-    if text.startswith("```"):
-        text = text.split("```")[1]
-        if text.startswith("json"):
-            text = text[4:]
-    return json.loads(text.strip())
+    for model in MODELS:
+        print(f"[INFO] モデル: {model} を試します")
+        for attempt in range(1, max_retries + 1):
+            try:
+                print(f"[INFO] API呼び出し試行 {attempt}/{max_retries}")
+
+                # タイムアウト設定（60秒で強制中断）
+                signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(API_TIMEOUT)
+
+                try:
+                    response = client.models.generate_content(
+                        model=model,
+                        contents=prompt
+                    )
+                finally:
+                    signal.alarm(0)  # タイムアウト解除
+
+                text = response.text.strip()
+                # コードブロックがあれば除去
+                if text.startswith("```"):
+                    text = text.split("```")[1]
+                    if text.startswith("json"):
+                        text = text[4:]
+                print(f"[INFO] モデル {model} で成功しました")
+                return json.loads(text.strip())
+
+            except TimeoutError:
+                print(f"[WARN] タイムアウト（{API_TIMEOUT}秒超過）")
+                if attempt < max_retries:
+                    print(f"[INFO] {retry_wait}秒後にリトライします...")
+                    time.sleep(retry_wait)
+
+            except genai_errors.ServerError as e:
+                print(f"[WARN] 503エラー（混雑中）: {e}")
+                if attempt < max_retries:
+                    print(f"[INFO] {retry_wait}秒後にリトライします...")
+                    time.sleep(retry_wait)
+
+            except Exception as e:
+                print(f"[WARN] モデル {model} でエラー: {e}")
+                break  # このモデルは諦めて次へ
+
+        print(f"[WARN] モデル {model} は失敗しました。次のモデルへ...")
+
+    raise RuntimeError("全モデルで失敗しました。時間をおいて再実行してください。")
 
 def stars(score):
     """スコアを星HTMLに変換"""
@@ -213,10 +274,20 @@ def render_daily_page(today, horoscope_data):
     date_str = today.strftime("%Y年%m月%d日")
     # index.htmlとほぼ同じ内容でアーカイブ保存
     html = render_index(today, horoscope_data)
-    # タイトルだけアーカイブ用に調整
+    # タイトルをアーカイブ用に調整
     html = html.replace(
         f"<title>{date_str}の星恋占い ✨ 12星座恋愛運</title>",
         f"<title>[アーカイブ] {date_str}の星恋占い | 星恋占い</title>"
+    )
+    # horoscope/配下に置くためCSSパスを1階層上に修正
+    html = html.replace(
+        '<link rel="stylesheet" href="style.css">',
+        '<link rel="stylesheet" href="../style.css">'
+    )
+    # archive.htmlへのリンクも修正
+    html = html.replace(
+        '<a href="archive.html">📅 過去の占いを見る</a>',
+        '<a href="../archive.html">📅 過去の占いを見る</a>'
     )
     return html
 
